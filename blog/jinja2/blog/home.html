@@ -1,0 +1,31 @@
+<!Doctype html>
+<html>
+    <title>Coderek's Django Site</title>
+    <head>
+        <link type="text/css" href="{{ static('blog/home.css') }}" rel="stylesheet">
+    </head>
+    <body>
+        <h1>
+            Coderek's Django Site
+        </h1>
+
+        <ul class="menu">
+            <li>Blog</li>
+            <li>Reader</li>
+        </ul>
+
+        <div class="articles">
+            {% for p in posts %}
+            <div class="article">
+                <div class="title">
+                    {{ p.title }}
+                </div>
+                <div class="body">
+                    {{ p.body|replace("\n", "<br>")|safe }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </body>
+</html>
+

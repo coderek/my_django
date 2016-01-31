@@ -1,0 +1,39 @@
+html {
+    width: 100%;
+    font-family: monospace;
+}
+body {
+    background-color: milk;
+    width: 600px;
+    margin: 10px auto;
+}
+
+.menu li {
+    float: left;
+    list-style: none;
+    width: 60px;
+}
+
+ul:after {
+    content: ' ';
+    display: block;
+    clear: both;
+}
+
+div.article {
+    margin-bottom: 30px;
+    background: #eee;
+    padding: 20px;
+    border-radius: 10px;
+    color: #333;
+    font-family: Consolas, monospace;
+}
+
+.article pre {
+    word-wrap: break-word;
+}
+
+.article .title {
+    margin-bottom: 20px;
+    font-size: 14pt;
+}

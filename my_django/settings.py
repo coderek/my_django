@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'blog.apps.BlogConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -66,6 +67,13 @@ TEMPLATES = [
             ],
         },
     },
+    {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'environment': 'my_django.jinja2.environment',
+        }
+    },
 ]
 
 WSGI_APPLICATION = 'my_django.wsgi.application'
@@ -77,9 +85,9 @@ WSGI_APPLICATION = 'my_django.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'derekzeng.me',
+        'HOST': 'derekzeng.me' if not DEBUG else '',
         'NAME': 'my_django',
-        'PASSWORD': 'zengqiang',
+        'PASSWORD': 'zengqiang' if not DEBUG else '',
         'USER': 'root',
         'TEST': {
             'NAME': 'test_my_django',
