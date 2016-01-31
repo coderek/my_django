@@ -34,6 +34,15 @@ div.article {
 }
 
 .article .title {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size: 14pt;
+}
+
+.article .title + time {
+    margin-bottom: 10px;
+    display: block;
+}
+
+.article .more {
+    margin-top: 10px;
 }

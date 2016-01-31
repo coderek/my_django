@@ -2,5 +2,5 @@ from django.conf.urls import url
 import views
 
 urlpatterns = [
-    url('', views.default)
+    url(r'^(\d+)/$', views.post, name='post'),
 ]

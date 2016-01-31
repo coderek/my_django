@@ -11,6 +11,19 @@ def default(request):
     ))
 
 
+def post(request, pk):
+    try:
+        post = Post.objects.get(pk=pk)
+    except:
+        return HttpResponse(status=404)
+
+    template = get_template('blog/post.html')
+    return HttpResponse(template.render(
+        {'p': post}
+    ))
+
+
 def home(request):
     template = get_template('blog/home.html')
-    return HttpResponse(template.render({'posts': Post.objects.all()}))
+    posts = Post.objects.order_by('-created_at').all()
+    return HttpResponse(template.render({'posts': posts}))

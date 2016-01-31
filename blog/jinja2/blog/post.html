@@ -1,8 +1,6 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-<div class="articles">
-    {% for p in posts %}
     <div class="article">
         <div class="title">
             {{ p.title }}
@@ -11,12 +9,7 @@
             <time>{{ p.created_at.strftime('%Y-%m-%d') }} </time>
         {% endif %}
         <div class="body">
-            {{ p.body_snippet|replace("\n", "<br>")|safe }}
-        </div>
-        <div class="more">
-            <a href="{{ url('post', args=[p.id]) }}">More</a>
+            {{ p.body|replace("\n", "<br>")|safe }}
         </div>
     </div>
-    {% endfor %}
-</div>
 {% endblock %}

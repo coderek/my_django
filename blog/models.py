@@ -13,3 +13,10 @@ class Post(models.Model):
     title = models.CharField(max_length=200)
     body = models.TextField(null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+    def __unicode__(self):
+        return self.title
+
+    @property
+    def body_snippet(self):
+        return self.body[:100] + '...'

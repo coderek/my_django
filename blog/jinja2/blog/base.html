@@ -1,0 +1,19 @@
+<!Doctype html>
+<html>
+    <title>Coderek's Django Site</title>
+    <head>
+        <link type="text/css" href="{{ static('blog/home.css') }}" rel="stylesheet">
+    </head>
+    <body>
+        <h1>
+            Coderek's Django Site
+        </h1>
+
+        <ul class="menu">
+            <li>Blog</li>
+            <li>Reader</li>
+        </ul>
+        {% block content %} {% endblock %}
+    </body>
+</html>
+
