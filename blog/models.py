@@ -16,7 +16,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def __unicode__(self):
-        return self.title
+        return '<ID:{}> {}'.format(self.id, self.title)
 
     @property
     def body_snippet(self):
@@ -25,3 +25,12 @@ class Post(models.Model):
     @property
     def body_text(self):
         return markdown2.markdown(self.body)
+
+
+class Comment(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    content = models.CharField(max_length=200)
+    email = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)

@@ -11,6 +11,11 @@
         <div class="body">
             {{ p.body_text|safe }}
         </div>
-        <a href="{{ url('admin:blog_post_change', args=(p.id,)) }}">Edit</a>
+        {% if logged_in %}
+            <a href="{{ url('admin:blog_post_change', args=(p.id,)) }}">Edit</a>
+        {% endif %}
     </div>
+
+    {% include 'blog/comments.html' %}
+
 {% endblock %}

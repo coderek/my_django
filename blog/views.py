@@ -18,9 +18,10 @@ def post(request, pk):
         return HttpResponse(status=404)
 
     template = get_template('blog/post.html')
-    return HttpResponse(template.render(
-        {'p': post}
-    ))
+    return HttpResponse(template.render({
+        'p': post,
+        'logged_in': request.user.is_authenticated(),
+    }))
 
 
 def home(request):
