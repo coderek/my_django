@@ -9,7 +9,8 @@
             <time>{{ p.created_at.strftime('%Y-%m-%d') }} </time>
         {% endif %}
         <div class="body">
-            {{ p.body|replace("\n", "<br>")|safe }}
+            {{ p.body_text|safe }}
         </div>
+        <a href="{{ url('admin:blog_post_change', args=(p.id,)) }}">Edit</a>
     </div>
 {% endblock %}

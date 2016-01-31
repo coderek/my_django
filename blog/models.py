@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import markdown2
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -20,3 +21,7 @@ class Post(models.Model):
     @property
     def body_snippet(self):
         return self.body[:100] + '...'
+
+    @property
+    def body_text(self):
+        return markdown2.markdown(self.body)
