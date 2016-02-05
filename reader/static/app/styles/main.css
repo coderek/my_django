@@ -1,0 +1,29 @@
+html, body {
+    background-color: #aaa;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#reader {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#reader>div {
+    border-top: 1px solid #eee;
+}
+#reader>:nth-child(2) {
+    flex: 1 0 auto;
+}
+
+#reader>:first-child {
+    height: 50px;
+}
+
+#reader>:last-child {
+    height: 50px;
+}
