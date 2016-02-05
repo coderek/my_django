@@ -35,6 +35,7 @@ if not DEBUG:
 
 INSTALLED_APPS = [
     'blog.apps.BlogConfig',
+    'reader.apps.ReaderConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

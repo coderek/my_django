@@ -3,14 +3,6 @@ from django.http import HttpResponse
 from blog.models import Post
 
 
-# Create your views here.
-def default(request):
-    template = get_template('posts.default.html')
-    return HttpResponse(template.render(
-        {'name': 'zengqiang '}
-    ))
-
-
 def post(request, pk):
     try:
         post = Post.objects.get(pk=pk)

@@ -1,3 +1,43 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
+
+
+class Feed(models.Model):
+    url = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+    description = models.CharField(max_length=100)
+    etag = models.CharField(max_length=100)
+    feed_url = models.CharField(max_length=100)
+    last_modified = models.DateTimeField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    entries = models.ManyToManyField('Entry')
+
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+
+class Entry(models.Model):
+    feed = models.ForeignKey('Feed')
+    title = models.CharField(max_length=100)
+    url = models.CharField(max_length=100)
+    author = models.CharField(max_length=100)
+    summary = models.TextField()
+    content = models.TextField()
+    published = models.DateTimeField()
+    categories = models.ManyToManyField('Category')
+    uuid = models.CharField(max_length=100)
+    is_read = models.BooleanField(default=False)
+    is_starred = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)

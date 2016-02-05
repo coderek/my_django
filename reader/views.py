@@ -1,8 +1,7 @@
 from django.template.loader import get_template
 from django.http import HttpResponse
 
-# Create your views here.
 
 def home(request):
-    return HttpResponse('Under construction')
-
+    tpl = get_template('reader/index.html')
+    return HttpResponse(tpl.render())

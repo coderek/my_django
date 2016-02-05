@@ -4,3 +4,5 @@ django>=1.9,<2.0
 jinja2
 MySQL_python
 markdown2
+feedparser==5.2.1
+pytz
