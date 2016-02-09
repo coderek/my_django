@@ -1,13 +1,14 @@
+import './setup';
+import * as utils from './body';
+import models from './api';
+
+let feeds = new models.Feeds;
+
 $(function () {
-    $('#add_feed').click(get_feed_url);
+    $('#add_feed').click(function () {
+        var url = utils.get_feed_url();
+        if (url) {
+            feeds.create({url: url});
+        }
+    });
 });
-
-function get_feed_url(ev) {
-    let url = prompt('input url');
-    if (url != '') {
-        add_feed(url);
-    }
-}
-
-function add_feed(url) {
-}
