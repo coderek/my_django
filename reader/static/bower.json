@@ -3,14 +3,15 @@
   "version": "0.0.1",
   "main": "public/app.js",
   "dependencies": {
-    "backbone.marionette": "marionette#^2.4.4"
+    "backbone.marionette": "marionette#^2.4.4",
+    "toastr": "^2.1.2"
   },
   "overrides": {
-      "backbone": {
-          "dependencies": {
-              "underscore": "*",
-              "jquery": "*"
-          }
+    "backbone": {
+      "dependencies": {
+        "underscore": "*",
+        "jquery": "*"
       }
+    }
   }
 }

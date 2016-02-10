@@ -27,7 +27,10 @@ $.ajaxSetup({
         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
         }
-    }
+    },
 });
 
-
+$(document).ajaxError(function (ev, jqxhr, settings, thrownError) {
+    let {status, responseText} = jqxhr;
+    toastr.error(status + ': ' + responseText, 'Error');
+});

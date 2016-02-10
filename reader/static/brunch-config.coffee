@@ -23,3 +23,4 @@ exports.config =
         'app/legacyES5Code/**/*'
       ]
       pattern: /\.(es6|jsx)$/
+

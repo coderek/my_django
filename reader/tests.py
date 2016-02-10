@@ -18,3 +18,27 @@ class TestFeed(TestCase):
         assert Feed.objects.count() == 1
         assert Entry.objects.count() > 0
 
+    def test_coding_horror(self):
+        url = 'http://blog.codinghorror.com/rss/'
+
+        fetch_feed(url)
+        assert Feed.objects.count() == 1
+        assert Entry.objects.count() > 0
+
+    def test_coolshell(self):
+        url = 'http://coolshell.cn/feed'
+
+        fetch_feed(url)
+        assert Feed.objects.count() == 1
+        assert Entry.objects.count() > 0
+
+    def test_repeated(self):
+        url = 'http://coolshell.cn/feed'
+
+        fetch_feed(url)
+        assert Feed.objects.count() == 1
+        assert Entry.objects.count() > 0
+
+        fetch_feed(url)
+        assert Feed.objects.count() == 1
+

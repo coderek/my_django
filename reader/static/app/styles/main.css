@@ -22,8 +22,38 @@ html, body {
 
 #reader>:first-child {
     height: 50px;
+    flex: none;
 }
 
 #reader>:last-child {
+    flex: none;
     height: 50px;
+}
+
+#reader>.body {
+    display: flex;
+}
+
+#feeds_manager {
+    width: 200px;
+    flex: none;
+}
+#feeds_manager ul {
+    list-style: none;
+    padding-left: 10px;
+}
+#feeds_manager ul li {
+    margin: 4px;
+}
+#feeds_manager ul li div:nth-child(2) {
+    font-size: 90%;
+    padding-left: 4px;
+    color: #333;
+}
+
+#entries_manager {
+    overflow: auto;
+}
+
+#entries_manager .entries  {
 }

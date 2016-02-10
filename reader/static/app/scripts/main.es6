@@ -1,14 +1,11 @@
 import './setup';
-import * as utils from './body';
-import models from './api';
+import {feeds} from './models';
+import './ui';
 
-let feeds = new models.Feeds;
+
+let app = new Marionette.Application;
+app.on('start', ()=> feeds.fetch());
 
 $(function () {
-    $('#add_feed').click(function () {
-        var url = utils.get_feed_url();
-        if (url) {
-            feeds.create({url: url});
-        }
-    });
+    app.start();
 });

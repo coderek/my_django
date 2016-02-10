@@ -16,6 +16,21 @@ class Feed(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+        }
+
+    @classmethod
+    def feed_list(cls):
+        feeds = cls.objects.all()
+        return [
+            f.as_dict()
+            for f in feeds
+        ]
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -41,3 +56,11 @@ class Entry(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'summary': self.summary,
+            'content': self.content,
+        }
