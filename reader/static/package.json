@@ -17,6 +17,7 @@
     "css-brunch": ">= 1.0 < 1.9",
     "handlebars-brunch": "^2.0.1",
     "javascript-brunch": ">= 1.0 < 1.9",
+    "sass-brunch": "^2.0.0",
     "uglify-js-brunch": ">= 1.0 < 1.9"
   },
   "devDependencies": {

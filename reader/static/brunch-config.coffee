@@ -8,7 +8,9 @@ exports.config =
           'bower_components/jquery/dist/jquery.js'
         ]
     stylesheets:
-      joinTo: 'styles/app.css'
+      joinTo:
+        'styles/app.css': 'app/styles/*'
+        'styles/vender.css': 'bower_components/bootstrap/dist/css/bootstrap.css'
     templates:
       joinTo: 'scripts/app.js'
 

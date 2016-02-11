@@ -4,7 +4,8 @@
   "main": "public/app.js",
   "dependencies": {
     "backbone.marionette": "marionette#^2.4.4",
-    "toastr": "^2.1.2"
+    "toastr": "^2.1.2",
+    "bootstrap": "^3.3.6"
   },
   "overrides": {
     "backbone": {

@@ -49,6 +49,8 @@ let EntriesManagerView = Marionette.CompositeView.extend({
 });
 
 export let MiddleLayout = Marionette.LayoutView.extend({
+    tagName: 'div',
+    className: 'middle-layout row',
     template: middle_layout_tpl,
     regions: {
         'left': '.left.region',
