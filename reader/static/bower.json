@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "main": "public/app.js",
   "dependencies": {
+    "bootstrap-sass": "3.3.6",
     "backbone.marionette": "marionette#^2.4.4",
-    "toastr": "^2.1.2",
-    "bootstrap": "^3.3.6"
+    "toastr": "^2.1.2"
   },
   "overrides": {
     "backbone": {

@@ -30,13 +30,14 @@ def fetch_feed(url):
     for entry in d['items']:
         published = datetime.fromtimestamp(
             mktime(entry.published_parsed)).replace(tzinfo=pytz.UTC)
+
         Entry.objects.create(
             feed=f,
             title=entry.title,
             url=entry.link,
             author=entry.author,
             summary=entry.description,
-            content=entry.content,
+            content=entry.content[0].get('value'),
             published=published,
             uuid=entry.id)
 

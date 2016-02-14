@@ -20,10 +20,11 @@ let FeedView = Marionette.ItemView.extend({
         'title': '.title',
     },
     events: {
-        'click @ui.title': 'selected',
+        'click': 'selected',
     },
     selected() {
         this.model.entries.fetch();
+        this.$el.addClass('selected');
         this.triggerMethod('selected');
     }
 });
@@ -33,6 +34,18 @@ let FeedsManagerView = Marionette.CompositeView.extend({
     childViewContainer: '.feeds',
     childView: FeedView,
     className: 'feeds-manager',
+    onRenderCollection () {
+        this.children.first().selected();
+    },
+    childEvents: {
+        'selected' (view) {
+            this.children.each( v => {
+                if (v != view && v.$el.is('.selected')) {
+                    v.$el.removeClass('selected');
+                }
+            });
+        }
+    }
 });
 
 let EntryView = Marionette.ItemView.extend({
@@ -50,7 +63,7 @@ let EntriesManagerView = Marionette.CompositeView.extend({
 
 export let MiddleLayout = Marionette.LayoutView.extend({
     tagName: 'div',
-    className: 'middle-layout row',
+    className: 'middle-layout',
     template: middle_layout_tpl,
     regions: {
         'left': '.left.region',
@@ -60,7 +73,6 @@ export let MiddleLayout = Marionette.LayoutView.extend({
         'selected': 'showEntries',
     },
     showEntries(childView) {
-        console.log(childView);
         this.getRegion('right').show(new EntriesManagerView({
             collection: childView.model.entries,
         }));

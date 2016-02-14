@@ -1,4 +1,12 @@
-let Feed = Backbone.Model.extend({});
+let Feed = Backbone.Model.extend({
+    parse(data) {
+        if (_.has(data, 'id') && !this.entries) {
+            this.entries = new Entries;
+            this.entries.url = `/reader/api/feeds/${data['id']}/entries`;
+        }
+        return Backbone.Model.prototype.parse.apply(this, arguments);
+    }
+});
 let Feeds = Backbone.Collection.extend({
     model: Feed,
     url: '/reader/api/feeds',
@@ -10,9 +18,4 @@ let Entries = Backbone.Collection.extend({
 });
 
 let feeds = new Feeds;
-feeds.on('add', (feed)=> {
-    feed.entries = new Entries;
-    feed.entries.url = `/reader/api/feeds/${feed.id}/entries`;
-});
-
 export {feeds};

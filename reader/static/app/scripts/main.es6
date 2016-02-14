@@ -13,7 +13,7 @@ app.addRegions({
 app.on('start', ()=> {
     app.getRegion('top_region').show(new AddFeedView);
     app.getRegion('middle_region').show(new MiddleLayout);
-    feeds.fetch();
+    feeds.fetch({reset: true});
 });
 
 $(()=>app.start());
