@@ -1,6 +1,6 @@
 import './setup';
 import {feeds} from './models';
-import {AddFeedView, MiddleLayout} from './ui';
+import {TopRegionView, MiddleLayout} from './ui';
 
 
 let app = new Marionette.Application;
@@ -11,7 +11,7 @@ app.addRegions({
 });
 
 app.on('start', ()=> {
-    app.getRegion('top_region').show(new AddFeedView);
+    app.getRegion('top_region').show(new TopRegionView);
     app.getRegion('middle_region').show(new MiddleLayout);
     feeds.fetch({reset: true});
 });

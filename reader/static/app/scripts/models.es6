@@ -12,7 +12,14 @@ let Feeds = Backbone.Collection.extend({
     url: '/reader/api/feeds',
 });
 
-let Entry = Backbone.Model.extend({});
+let Entry = Backbone.Model.extend({
+    parse(data) {
+        if (data['published']) {
+            data['published'] = new Date(data['published']);
+        }
+        return data;
+    }
+});
 let Entries = Backbone.Collection.extend({
     model: Entry,
 });

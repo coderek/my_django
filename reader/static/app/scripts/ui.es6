@@ -1,11 +1,12 @@
 import {feeds} from './models';
-import {get_feed_url} from './body';
+import * as utils from './utils';
 import {default as feed_tpl} from 'templates/feed';
 import {default as entry_tpl} from 'templates/entry';
-import {default as add_feed_tpl} from 'templates/add_feed';
+import {default as top_region_tpl} from 'templates/top_region';
 import {default as feeds_manager_tpl} from 'templates/feeds_manager';
 import {default as entries_manager_tpl} from 'templates/entries_manager';
 import {default as middle_layout_tpl} from 'templates/middle_layout';
+import {default as no_feeds_tpl} from 'templates/no_feeds';
 
 let FeedView = Marionette.ItemView.extend({
     template: feed_tpl,
@@ -29,11 +30,23 @@ let FeedView = Marionette.ItemView.extend({
     }
 });
 
+let EmptyFeedsView = Marionette.ItemView.extend({
+    template: no_feeds_tpl,
+    className: 'empty-view',
+    events: {
+        'click .js-add-feed': 'create_feed',
+    },
+    create_feed() {
+        utils.try_create_feed(feeds);
+    }
+});
+
 let FeedsManagerView = Marionette.CompositeView.extend({
     template: feeds_manager_tpl,
     childViewContainer: '.feeds',
     childView: FeedView,
     className: 'feeds-manager',
+    emptyView: EmptyFeedsView,
     onRenderCollection () {
         this.children.first().selected();
     },
@@ -84,8 +97,9 @@ export let MiddleLayout = Marionette.LayoutView.extend({
     },
 });
 
-export let AddFeedView = Marionette.ItemView.extend({
-    template: add_feed_tpl,
+export let TopRegionView = Marionette.ItemView.extend({
+    template: top_region_tpl,
+    className: 'container',
     ui: {
         'add_button': '#add_feed',
     },
@@ -93,10 +107,6 @@ export let AddFeedView = Marionette.ItemView.extend({
         'click @ui.add_button': 'create_feed',
     },
     create_feed() {
-        let url = get_feed_url();
-        if (url) {
-            feeds.create({url}, {wait: true});
-        }
+        utils.try_create_feed(feeds);
     }
 });
-

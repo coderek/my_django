@@ -64,4 +64,5 @@ class Entry(models.Model):
             'title': self.title,
             'summary': self.summary,
             'content': self.content,
+            'published': self.published,
         }

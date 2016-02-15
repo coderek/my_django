@@ -1,5 +1,13 @@
 @import "bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 
+$top_bg_color: #ddd;
+$bottom_bg_color: #ddd;
+$left_region_border_color: #ddd;
+$right_region_border_color: #ddd;
+$entry_border_color: #ddd;
+
+
+
 html, body {
     margin: 0;
     padding: 0;
@@ -10,7 +18,6 @@ html, body {
     padding: 0;
     width: 100%;
     height: 100%;
-    border: 1px solid green;
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* align items in Main Axis */
@@ -18,9 +25,10 @@ html, body {
     align-content: stretch; /* Extra space in Cross Axis */
 
     #top_region {
+        background-color: $top_bg_color;
         height: 50px;
+        line-height: 50px;
         flex: none;
-        border: 1px solid blue;
     }
     #middle_region {
         flex: 1; /* same as flex: 1 1 auto; */
@@ -36,7 +44,7 @@ html, body {
             display: flex;
             width: 100%;
             .left.region {
-                border: 1px solid red;
+                border: 1px solid $left_region_border_color;
                 width: 200px;
                 flex: none;
 
@@ -65,15 +73,14 @@ html, body {
                 }
             }
             .right.region {
-                border: 1px solid red;
+                border: 1px solid $right_region_border_color;
                 flex: 1;
                 overflow: auto;
                 .entry {
-                    border-top: 1px solid pink;
+                    border-top: 1px solid $entry_border_color;
                     padding: 10px;
                     .title {
-                        margin: 10px 5px;
-                        font-size: 2em;
+                        font-size: 1em;
                     }
                     .body {
                         padding: 10px;
@@ -83,9 +90,25 @@ html, body {
         }
     }
     #bottom_region {
+        @extend .inset-text;
+        background-color: $bottom_bg_color;
         height: 50px;
+        line-height: 50px;
+        padding-right: 20px;
+        padding-left: 20px;
+        color: #888;
         flex: none;
-        border: 1px solid blue;
     }
 }
 
+.empty-view {
+    text-align: center;
+    padding: 20px;
+}
+
+.inset-text {
+    text-shadow: 1px 4px 6px #def, 0 0 0 #000, 1px 4px 6px #def;
+    /* Don't show shadows when selecting text */
+    &::-moz-selection { background: #5af; color: #fff; text-shadow: none; }
+    &::selection { background: #5af; color: #fff; text-shadow: none; }
+}

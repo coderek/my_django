@@ -1,3 +1,4 @@
+import * as utils from './utils';
 // using jQuery
 function getCookie(name) {
     var cookieValue = null;
@@ -33,4 +34,11 @@ $.ajaxSetup({
 $(document).ajaxError(function (ev, jqxhr, settings, thrownError) {
     let {status, responseText} = jqxhr;
     toastr.error(status + ': ' + responseText, 'Error');
+});
+
+Handlebars.registerHelper('date', function(date, format) {
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    let day = date.getDay();
+    return `${year}-${utils.pad(month, 2)}-${utils.pad(day, 2)}`;
 });
