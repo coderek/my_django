@@ -50,6 +50,19 @@ class TestFeed(TestCase):
         fetch_feed(url)
         assert Feed.objects.count() == 1
 
+    def test_xdite(self):
+        url = 'http://feeds.feedburner.com/xxddite'
+
+        fetch_feed(url)
+        assert Feed.objects.count() == 1
+        assert Entry.objects.count() > 0
+
+    def test_lucumr(self):
+        url = 'http://lucumr.pocoo.org/feed.atom'
+
+        fetch_feed(url)
+        assert Feed.objects.count() == 1
+        assert Entry.objects.count() > 0
 
 class TestUpdateFeeds(TestCase):
     fixtures = ['feeds.yaml']

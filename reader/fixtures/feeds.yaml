@@ -58,3 +58,7 @@
   pk: 75
   fields:
     feed_url: http://feeds.feedburner.com/tualatrix
+- model: reader.feed
+  pk: 76
+  fields:
+    feed_url: http://planetpython.org/rss20.xml

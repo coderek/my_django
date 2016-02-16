@@ -53,6 +53,11 @@ html, body {
                 .feeds {
                     padding: 0;
                     .feed {
+                        .description {
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            overflow: hidden;
+                        }
                         &.selected {
                             background-color: #eee;
                         }

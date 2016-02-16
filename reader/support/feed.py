@@ -49,15 +49,21 @@ def get_feed_obj(source):
     last_modified = to_date_obj(published_parsed)
 
     return {
-        'title': source['channel']['title'],
-        'description': source['channel']['description'],
-        'etag': source.etag if 'etag' in source else '',
+        'title': f.get('title'),
+        'description': f.get('description'),
+        'etag': source.get('etag', ''),
         'last_modified': last_modified,
     }
 
 
 def get_entry_obj(source):
-    published = to_date_obj(source.published_parsed)
+    published = (
+        source.published_parsed
+        if 'published_parsed' in source else (
+            source.updated_parsed
+            if 'updated_parsed' in source else localtime()
+        )
+    )
     if 'content' in source:
         content = source.content[0].get('value')
     else:
@@ -68,7 +74,7 @@ def get_entry_obj(source):
         'author': source.author if 'author' in source else '',
         'summary': source.description,
         'content': content,
-        'published': published,
+        'published': to_date_obj(published),
         'uuid': source.id if 'id' in source else source.title,
     }
 
