@@ -4,6 +4,7 @@ from reader.support.feed import fetch_feed
 
 
 class TestFeed(TestCase):
+
     def test_fetch_feed(self):
         url = 'http://feeds.feedburner.com/codinghorror'
         fetch_feed(url)
@@ -42,3 +43,9 @@ class TestFeed(TestCase):
         fetch_feed(url)
         assert Feed.objects.count() == 1
 
+
+class TestUpdateFeeds(TestCase):
+    fixtures = ['feeds.yaml']
+
+    def test_update_feed(self):
+        assert Feed.objects.filter(pk=75).exists()

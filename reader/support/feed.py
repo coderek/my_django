@@ -6,39 +6,58 @@ from reader.models import Feed, Entry
 
 
 def fetch_feed(url):
+    try:
+        f = Feed.objects.get(feed_url=url)
+        # use etag
+        d = feedparser.parse(url, etag=f.etag)
 
-    exist = Feed.objects.filter(feed_url=url).first()
-    if exist:
-        return (exist, 0)
+        if d.status == 304:
+            # nothing changed
+            return f
 
-    d = feedparser.parse(url)
+    except Feed.DoesNotExist:
+        d = feedparser.parse(url)
 
+    feed = get_feed_obj(d)
+    feed['feed_url'] = url
+
+    f, created = Feed.objects.update_or_create(defaults=feed, feed_url=url)
+
+    for entry_item in d['entries']:
+        entry = get_entry_obj(entry_item)
+        entry['feed'] = f
+        Entry.objects.update_or_create(defaults=entry, url=entry['url'])
+
+    return f
+
+
+def get_feed_obj(source):
     published_parsed = (
-        d.feed.published_parsed
-        if 'published_parsed' in d.feed else d.feed.updated_parsed
+        source.feed.published_parsed
+        if 'published_parsed' in source.feed else source.feed.updated_parsed
     )
-    last_modified = datetime.fromtimestamp(mktime(published_parsed))
-    last_modified = last_modified.replace(tzinfo=pytz.UTC)
-    f = Feed.objects.create(
-        title=d['channel']['title'],
-        description=d['channel']['description'],
-        etag=d.etag if 'etag' in d else '',
-        last_modified=last_modified,
-        feed_url=url,
-    )
+    last_modified = to_date_obj(published_parsed)
 
-    for entry in d['items']:
-        published = datetime.fromtimestamp(
-            mktime(entry.published_parsed)).replace(tzinfo=pytz.UTC)
+    return {
+        'title': source['channel']['title'],
+        'description': source['channel']['description'],
+        'etag': source.etag if 'etag' in source else '',
+        'last_modified': last_modified,
+    }
 
-        Entry.objects.create(
-            feed=f,
-            title=entry.title,
-            url=entry.link,
-            author=entry.author,
-            summary=entry.description,
-            content=entry.content[0].get('value'),
-            published=published,
-            uuid=entry.id)
 
-    return (f, 1)
+def get_entry_obj(source):
+    published = to_date_obj(source.published_parsed)
+    return {
+        'title': source.title,
+        'url': source.link,
+        'author': source.author,
+        'summary': source.description,
+        'content': source.content[0].get('value'),
+        'published': published,
+        'uuid': source.id
+    }
+
+
+def to_date_obj(time_parsed):
+    return datetime.fromtimestamp(mktime(time_parsed)).replace(tzinfo=pytz.UTC)
