@@ -84,6 +84,19 @@ html, body {
                 .entry {
                     border-top: 1px solid $entry_border_color;
                     padding: 10px;
+                    .title-and-time {
+                        display: flex;
+                        a {
+                          flex: none;
+                        }
+                        time {
+                          width: 100px;
+                          text-align: right;
+                        }
+                        .title {
+                          flex-grow: 1;
+                        }
+                    }
                     .title {
                         font-size: 1em;
                         cursor: pointer;

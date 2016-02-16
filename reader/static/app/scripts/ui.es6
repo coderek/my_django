@@ -26,7 +26,7 @@ let FeedView = Marionette.ItemView.extend({
     selected() {
         this.model.entries.fetch();
         this.$el.addClass('selected');
-        this.triggerMethod('selected');
+        this.triggerMethod('feed:selected');
     }
 });
 
@@ -51,7 +51,7 @@ let FeedsManagerView = Marionette.CompositeView.extend({
         this.children.first().selected();
     },
     childEvents: {
-        'selected' (view) {
+        'feed:selected' (view) {
             this.children.each( v => {
                 if (v != view && v.$el.is('.selected')) {
                     v.$el.removeClass('selected');
@@ -87,6 +87,15 @@ let EntriesManagerView = Marionette.CompositeView.extend({
     childViewContainer: '.entries',
     childView: EntryView,
     className: 'entries-manager',
+    ui: {
+        'refresh_btn': '.js-refresh-feed',
+    },
+    events: {
+        'click @ui.refresh_btn': 'refreshFeed',
+    },
+    refreshFeed() {
+        this.triggerMethod('feed:refresh')
+    }
 });
 
 export let MiddleLayout = Marionette.LayoutView.extend({
@@ -98,12 +107,21 @@ export let MiddleLayout = Marionette.LayoutView.extend({
         'right': '.right.region',
     },
     childEvents: {
-        'selected': 'showEntries',
+        'feed:selected': 'showEntries',
+        'feed:refresh': 'refreshSelectedFeed',
     },
     showEntries(childView) {
+        let selected_feed = childView.model;
         this.getRegion('right').show(new EntriesManagerView({
-            collection: childView.model.entries,
+            collection: selected_feed.entries,
         }));
+        this.selected_feed = selected_feed;
+    },
+    refreshSelectedFeed(childView) {
+        let selected_feed = this.selected_feed;
+        if (selected_feed) {
+            selected_feed.refresh();
+        }
     },
     onRender() {
         this.getRegion('left').show(new FeedsManagerView({

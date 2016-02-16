@@ -5,6 +5,9 @@ let Feed = Backbone.Model.extend({
             this.entries.url = `/reader/api/feeds/${data['id']}/entries`;
         }
         return Backbone.Model.prototype.parse.apply(this, arguments);
+    },
+    refresh() {
+        this.fetch({data: {refresh: true}}).then(()=>this.entries.fetch());
     }
 });
 let Feeds = Backbone.Collection.extend({
