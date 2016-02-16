@@ -19,8 +19,11 @@ class FeedsView(View):
         try:
             body = json.loads(request.body)
             url = body.get('url')
-            m = fetch_feed(url)
-            return JsonResponse(m.as_dict(), safe=False)
+            m, error = fetch_feed(url)
+            if not error:
+                return JsonResponse(m.as_dict(), safe=False)
+            else:
+                return HttpResponseBadRequest(error)
         except Exception as e:
             return HttpResponseBadRequest(e)
 

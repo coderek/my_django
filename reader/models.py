@@ -5,11 +5,11 @@ from django.contrib.auth.models import User
 
 
 class Feed(models.Model):
-    url = models.CharField(max_length=100)
-    title = models.CharField(max_length=100)
-    description = models.CharField(max_length=100)
-    etag = models.CharField(max_length=100)
-    feed_url = models.CharField(max_length=100, unique=True)
+    url = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    etag = models.CharField(max_length=255)
+    feed_url = models.CharField(max_length=255, unique=True)
     last_modified = models.DateTimeField(null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
@@ -36,7 +36,7 @@ class Feed(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     entries = models.ManyToManyField('Entry')
 
@@ -46,14 +46,14 @@ class Category(models.Model):
 
 class Entry(models.Model):
     feed = models.ForeignKey('Feed')
-    title = models.CharField(max_length=100)
-    url = models.CharField(max_length=100, unique=True)
-    author = models.CharField(max_length=100)
+    title = models.CharField(max_length=255)
+    url = models.CharField(max_length=255, unique=True)
+    author = models.CharField(max_length=255)
     summary = models.TextField()
     content = models.TextField()
     published = models.DateTimeField()
     categories = models.ManyToManyField('Category')
-    uuid = models.CharField(max_length=100, unique=True)
+    uuid = models.CharField(max_length=255, unique=True)
     is_read = models.BooleanField(default=False)
     is_starred = models.BooleanField(default=False)
 
@@ -70,4 +70,5 @@ class Entry(models.Model):
             'summary': self.summary,
             'content': self.content,
             'published': self.published,
+            'url': self.url,
         }

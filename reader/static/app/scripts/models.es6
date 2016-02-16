@@ -13,11 +13,21 @@ let Feeds = Backbone.Collection.extend({
 });
 
 let Entry = Backbone.Model.extend({
+    defaults: {
+        'title': '',
+        'summary': '',
+        'content': '',
+        'published': '',
+        'url': '',
+    },
     parse(data) {
         if (data['published']) {
             data['published'] = new Date(data['published']);
         }
         return data;
+    },
+    content() {
+        return this.get('content') || this.get('summary');
     }
 });
 let Entries = Backbone.Collection.extend({

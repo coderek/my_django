@@ -91,6 +91,10 @@ html, body {
                     }
 
                     .content {
+                        * {
+                          max-width: 100%;
+                        }
+                      
                         display: none;
                         background-color: #eee;
                         border-top: 1px solid black;

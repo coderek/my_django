@@ -76,7 +76,7 @@ let EntryView = Marionette.ItemView.extend({
             return;
         }
 
-        this.ui.entry_content.html(this.model.get('content'));
+        this.ui.entry_content.html(this.model.content());
         this.$el.addClass('open');
     }
 });
@@ -114,7 +114,7 @@ export let MiddleLayout = Marionette.LayoutView.extend({
 
 export let TopRegionView = Marionette.ItemView.extend({
     template: top_region_tpl,
-    className: '',
+    className: 'container',
     ui: {
         'add_button': '#add_feed',
     },

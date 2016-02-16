@@ -1,11 +1,14 @@
+import logging
 from datetime import datetime
 import feedparser
 import pytz
-from time import mktime
+from time import mktime, localtime
 from reader.models import Feed, Entry
 
 
 def fetch_feed(url):
+    logging.warning('fetching feed from {}'.format(url))
+
     try:
         f = Feed.objects.get(feed_url=url)
         # use etag
@@ -13,10 +16,13 @@ def fetch_feed(url):
 
         if d.status == 304:
             # nothing changed
-            return f
+            return f, None
 
     except Feed.DoesNotExist:
         d = feedparser.parse(url)
+
+    if d.status == 301:
+        return None, 'Feed is no longer there.'
 
     feed = get_feed_obj(d)
     feed['feed_url'] = url
@@ -26,15 +32,19 @@ def fetch_feed(url):
     for entry_item in d['entries']:
         entry = get_entry_obj(entry_item)
         entry['feed'] = f
-        Entry.objects.update_or_create(defaults=entry, url=entry['url'])
+        logging.warning(entry['url'])
+        Entry.objects.update_or_create(defaults=entry, uuid=entry['uuid'])
 
-    return f
+    return f, None
 
 
 def get_feed_obj(source):
+    f = source.feed
     published_parsed = (
-        source.feed.published_parsed
-        if 'published_parsed' in source.feed else source.feed.updated_parsed
+        f.published_parsed
+        if 'published_parsed' in f else (
+            f.updated_parsed if 'updated_parsed' in f else localtime()
+        )
     )
     last_modified = to_date_obj(published_parsed)
 
@@ -48,14 +58,18 @@ def get_feed_obj(source):
 
 def get_entry_obj(source):
     published = to_date_obj(source.published_parsed)
+    if 'content' in source:
+        content = source.content[0].get('value')
+    else:
+        content = ''
     return {
         'title': source.title,
         'url': source.link,
-        'author': source.author,
+        'author': source.author if 'author' in source else '',
         'summary': source.description,
-        'content': source.content[0].get('value'),
+        'content': content,
         'published': published,
-        'uuid': source.id
+        'uuid': source.id if 'id' in source else source.title,
     }
 
 

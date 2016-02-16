@@ -6,11 +6,18 @@ from reader.support.feed import fetch_feed
 class TestFeed(TestCase):
 
     def test_fetch_feed(self):
-        url = 'http://feeds.feedburner.com/codinghorror'
-        fetch_feed(url)
+        url = 'https://weworkremotely.com/categories/2/jobs.rss'
+        f, error = fetch_feed(url)
+
+        assert Feed.objects.count() == 0
+        assert error
+
+    def test_yc_feed(self):
+        url = 'https://news.ycombinator.com/rss'
+        f, error = fetch_feed(url)
 
         assert Feed.objects.count() == 1
-        assert Entry.objects.count() > 0
+        assert not error
 
     def test_chinese_feed(self):
         url = 'http://codingnow.com/atom.xml'
