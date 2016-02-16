@@ -1,0 +1,60 @@
+- model: reader.feed
+  pk: 1
+  fields:
+    feed_url: http://codingnow.com/atom.xml
+- model: reader.feed
+  pk: 2
+  fields:
+    feed_url: http://coolshell.cn/feed
+- model: reader.feed
+  pk: 3
+  fields:
+    feed_url: http://stackoverflow.com/feeds/tag/facebook-graph-api
+- model: reader.feed
+  pk: 4
+  fields:
+    feed_url: http://techcrunch.cn/feed
+- model: reader.feed
+  pk: 5
+  fields:
+    feed_url: http://feeds.feedburner.com/TechCrunch
+- model: reader.feed
+  pk: 6
+  fields:
+    feed_url: http://feeds.feedburner.com/codinghorror
+- model: reader.feed
+  pk: 7
+  fields:
+    feed_url: https://tech.dropbox.com/feed
+- model: reader.feed
+  pk: 8
+  fields:
+    feed_url: http://blog.thousandeyes.com/feed
+- model: reader.feed
+  pk: 9
+  fields:
+    feed_url: https://weworkremotely.com/categories/2/jobs.rss
+- model: reader.feed
+  pk: 10
+  fields:
+    feed_url: https://news.ycombinator.com/rss
+- model: reader.feed
+  pk: 11
+  fields:
+    feed_url: http://feeds.feedburner.com/blogspot/hsDu
+- model: reader.feed
+  pk: 12
+  fields:
+    feed_url: http://feeds.feedburner.com/GDBcode
+- model: reader.feed
+  pk: 13
+  fields:
+    feed_url: https://developers.facebook.com/blog/feed
+- model: reader.feed
+  pk: 14
+  fields:
+    feed_url: http://ruby-china.org/topics/feed
+- model: reader.feed
+  pk: 15
+  fields:
+    feed_url: http://feeds.feedburner.com/tualatrix

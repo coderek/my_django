@@ -64,6 +64,21 @@ let FeedsManagerView = Marionette.CompositeView.extend({
 let EntryView = Marionette.ItemView.extend({
     template: entry_tpl,
     className: 'entry',
+    ui: {
+        'entry_content': '.content',
+    },
+    events: {
+        'click .title': 'openEntry',
+    },
+    openEntry() {
+        if (this.$el.is('.open')) {
+            this.$el.removeClass('open');
+            return;
+        }
+
+        this.ui.entry_content.html(this.model.get('content'));
+        this.$el.addClass('open');
+    }
 });
 
 
@@ -99,7 +114,7 @@ export let MiddleLayout = Marionette.LayoutView.extend({
 
 export let TopRegionView = Marionette.ItemView.extend({
     template: top_region_tpl,
-    className: 'container',
+    className: '',
     ui: {
         'add_button': '#add_feed',
     },

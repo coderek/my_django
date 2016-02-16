@@ -21,6 +21,11 @@ let Entry = Backbone.Model.extend({
     }
 });
 let Entries = Backbone.Collection.extend({
+    comparator(e1, e2) {
+        let p1 = e1.get('published').valueOf();
+        let p2 = e2.get('published').valueOf();
+        return p1 < p2 ? 1 : -1;
+    },
     model: Entry,
 });
 

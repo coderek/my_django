@@ -38,7 +38,7 @@ $(document).ajaxError(function (ev, jqxhr, settings, thrownError) {
 
 Handlebars.registerHelper('date', function(date, format) {
     let year = date.getFullYear();
-    let month = date.getMonth();
-    let day = date.getDay();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
     return `${year}-${utils.pad(month, 2)}-${utils.pad(day, 2)}`;
 });

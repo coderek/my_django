@@ -26,9 +26,10 @@ html, body {
 
     #top_region {
         background-color: $top_bg_color;
-        height: 50px;
-        line-height: 50px;
-        flex: none;
+        flex: 0 1 auto;
+        padding: 5px;
+        z-index: 10;
+        box-shadow: 0 1px 10px #333;
     }
     #middle_region {
         flex: 1; /* same as flex: 1 1 auto; */
@@ -47,6 +48,7 @@ html, body {
                 border: 1px solid $left_region_border_color;
                 width: 200px;
                 flex: none;
+                overflow: auto;
 
                 .feeds {
                     padding: 0;
@@ -76,13 +78,23 @@ html, body {
                 border: 1px solid $right_region_border_color;
                 flex: 1;
                 overflow: auto;
+                .entry.open .content {
+                    display: block;
+                }
                 .entry {
                     border-top: 1px solid $entry_border_color;
                     padding: 10px;
                     .title {
                         font-size: 1em;
+                        cursor: pointer;
+                        user-select: none;
                     }
-                    .body {
+
+                    .content {
+                        display: none;
+                        background-color: #eee;
+                        border-top: 1px solid black;
+                        margin: 10px;
                         padding: 10px;
                     }
                 }
@@ -91,13 +103,13 @@ html, body {
     }
     #bottom_region {
         @extend .inset-text;
+        box-shadow: 0 -1px 10px #333;
+        z-index: 10;
         background-color: $bottom_bg_color;
-        height: 50px;
-        line-height: 50px;
-        padding-right: 20px;
-        padding-left: 20px;
+        padding: 10px;
         color: #888;
-        flex: none;
+        font-size: 0.8em;
+        flex: 0 1 auto;
     }
 }
 
@@ -111,4 +123,12 @@ html, body {
     /* Don't show shadows when selecting text */
     &::-moz-selection { background: #5af; color: #fff; text-shadow: none; }
     &::selection { background: #5af; color: #fff; text-shadow: none; }
+}
+
+.controls {
+    padding: 4px;
+    background-color: #456;
+    button {
+        @extend .btn-xs;
+    }
 }
