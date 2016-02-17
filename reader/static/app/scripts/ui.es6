@@ -141,5 +141,10 @@ export let TopRegionView = Marionette.ItemView.extend({
     },
     create_feed() {
         utils.try_create_feed(feeds);
-    }
+    },
+    templateHelpers() {
+        return {
+            authed
+        };
+    },
 });

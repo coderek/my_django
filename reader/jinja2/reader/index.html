@@ -24,6 +24,9 @@
         {% include 'reader/reader_main.html' %}
 
         <script src="{{ static('reader/scripts/app.js') }}"></script>
+        <script>
+        var authed = {{'true' if is_logged_in else 'false'}};
+        </script>
         <script>require('scripts/main')</script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->

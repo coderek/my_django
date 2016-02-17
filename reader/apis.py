@@ -1,8 +1,7 @@
-import logging
 from django.conf.urls import url
 from django.views.generic import View
 from django.http import (
-    HttpResponse,
+    HttpResponseForbidden,
     HttpResponseBadRequest,
     JsonResponse,
     HttpResponseNotFound,
@@ -13,13 +12,15 @@ from reader.models import Feed
 
 # logger = logging.getLogger('__name__')
 
-class FeedsView(View):
 
+class FeedsView(View):
     def get(self, request):
         feeds = Feed.feed_list()
         return JsonResponse(feeds, safe=False)
 
     def post(self, request):
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden('Must login')
         try:
             body = json.loads(request.body)
             url = body.get('url')
