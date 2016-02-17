@@ -2,18 +2,45 @@
 <html>
     <title>Coderek's Django Site</title>
     <head>
+        <link href='https://fonts.googleapis.com/css?family=Headland+One' rel='stylesheet' type='text/css'>
         <link type="text/css" href="{{ static('blog/home.css') }}" rel="stylesheet">
     </head>
     <body>
-        <h1>
-            Coderek's Django Site
-        </h1>
-
-        <ul class="menu">
-            <li><a href="{{ url('blog') }}">Blog</a></li>
-            <li><a href="{{ url('reader') }}">Reader</a></li>
-        </ul>
-        {% block content %} {% endblock %}
+        <header>
+            <div class="content">
+                <h1>
+                    Coderek's Django Site
+                </h1>
+            </div>
+        </header>
+        <nav>
+            <div class="content">
+                <ul class="menu">
+                    <li><a href="{{ url('blog') }}">Blog</a></li>
+                    <li><a href="{{ url('reader') }}">Reader</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="content body">
+            <div class="main">
+                {% block content %} {% endblock %}
+            </div>
+            <nav class="side-menu">
+                <div class="input-group">
+                    <form action="/posts/search">
+                        <input class="search" type="text" name="search_term">
+                        <button class="Search Button">Search</button>
+                    </form>
+                </div>
+                {% include 'blog/recent_posts.html' %}
+                {% include 'blog/contacts.html' %}
+            </nav>
+        </div>
+        <footer>
+            <div class="content">
+                Coderek @ 2014
+            </div>
+        </footer>
     </body>
 </html>
 

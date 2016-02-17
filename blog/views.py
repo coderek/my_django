@@ -13,10 +13,25 @@ def post(request, pk):
     return HttpResponse(template.render({
         'p': post,
         'logged_in': request.user.is_authenticated(),
+        'recent_posts': Post.objects.order_by('-created_at').all()[:10],
     }))
 
 
 def home(request):
     template = get_template('blog/home.html')
     posts = Post.objects.order_by('-created_at').all()
-    return HttpResponse(template.render({'posts': posts}))
+    return HttpResponse(template.render({
+        'posts': posts,
+        'recent_posts': posts,
+    }))
+
+
+def search(request):
+    template = get_template('blog/search.html')
+    term = request.GET.get('search_term', '')
+    posts = Post.objects.order_by('-created_at').filter(title__contains=term)
+    return HttpResponse(template.render({
+        'posts': posts,
+        'recent_posts': posts,
+        'term': term,
+    }))

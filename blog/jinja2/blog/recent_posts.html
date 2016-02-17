@@ -1,0 +1,11 @@
+<h3>Recent Posts</h3>
+
+<ul>
+{% for p in recent_posts %}
+
+<li>
+    <a href="{{ url('post', args=[p.id]) }}">{{ p.title }}</a>
+</li>
+
+{% endfor %}
+</ul>

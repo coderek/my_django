@@ -1,0 +1,24 @@
+
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<h3>Search results for: "{{ term }}"</h3>
+<div class="articles">
+    {% for p in posts %}
+    <div class="article">
+        <div class="title">
+            {{ p.title }}
+        </div>
+        {% if p.created_at %}
+            <time>{{ p.created_at.strftime('%Y-%m-%d') }} </time>
+        {% endif %}
+        <div class="body">
+            {{ p.body_snippet|replace("\n", "<br>")|safe }}
+        </div>
+        <div class="more">
+            <a href="{{ url('post', args=[p.id]) }}">More</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

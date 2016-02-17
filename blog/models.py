@@ -20,7 +20,7 @@ class Post(models.Model):
 
     @property
     def body_snippet(self):
-        return self.body[:100] + '...'
+        return self.body[:200] + '...'
 
     @property
     def body_text(self):
