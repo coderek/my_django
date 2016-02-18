@@ -1,8 +1,12 @@
 from django.conf.urls import url
-import views
+from views import (
+    PostView,
+    SearchView,
+    HomeView,
+)
 
 urlpatterns = [
-    url(r'^(\d+)/?$', views.post, name='post'),
-    url(r'^search', views.search),
-    url(r'^$', views.home, name='blog'),
+    url(r'^(\d+)/?$', PostView.as_view(), name='post'),
+    url(r'^search', SearchView.as_view()),
+    url(r'^$', HomeView.as_view(), name='blog'),
 ]

@@ -78,6 +78,11 @@ let EntryView = Marionette.ItemView.extend({
 
         this.ui.entry_content.html(this.model.content());
         this.$el.addClass('open');
+    },
+    onRender() {
+        if (this.model.isNewEntry()) {
+            this.$el.addClass('new');
+        }
     }
 });
 

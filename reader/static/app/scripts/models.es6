@@ -23,6 +23,13 @@ let Entry = Backbone.Model.extend({
         'published': '',
         'url': '',
     },
+    isNewEntry() {
+        let published_date = this.get('published');
+        let today = new Date();
+        return today.getYear() == published_date.getYear() &&
+            today.getMonth() == published_date.getMonth() &&
+            today.getDate() == published_date.getDate();
+    },
     parse(data) {
         if (data['published']) {
             data['published'] = new Date(data['published']);

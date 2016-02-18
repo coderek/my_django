@@ -64,6 +64,13 @@ class TestFeed(TestCase):
         assert Feed.objects.count() == 1
         assert Entry.objects.count() > 0
 
+    def test_techcrunch(self):
+        url = 'http://techcrunch.cn/feed'
+
+        fetch_feed(url)
+        assert Feed.objects.count() == 1
+        assert Entry.objects.count() > 0
+
 class TestUpdateFeeds(TestCase):
     fixtures = ['feeds.yaml']
 

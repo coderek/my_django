@@ -21,21 +21,21 @@ def fetch_feed(url):
     except Feed.DoesNotExist:
         d = feedparser.parse(url)
 
-    if d.status == 301:
-        return None, 'Feed is no longer there.'
+    try:
+        feed = get_feed_obj(d)
+        feed['feed_url'] = url
 
-    feed = get_feed_obj(d)
-    feed['feed_url'] = url
+        f, created = Feed.objects.update_or_create(defaults=feed, feed_url=url)
 
-    f, created = Feed.objects.update_or_create(defaults=feed, feed_url=url)
+        for entry_item in d['entries']:
+            entry = get_entry_obj(entry_item)
+            entry['feed'] = f
+            logging.warning(entry['url'])
+            Entry.objects.update_or_create(defaults=entry, uuid=entry['uuid'])
 
-    for entry_item in d['entries']:
-        entry = get_entry_obj(entry_item)
-        entry['feed'] = f
-        logging.warning(entry['url'])
-        Entry.objects.update_or_create(defaults=entry, uuid=entry['uuid'])
-
-    return f, None
+        return f, None
+    except Exception as e:
+        return None, e.message
 
 
 def get_feed_obj(source):

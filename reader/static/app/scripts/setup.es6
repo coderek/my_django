@@ -28,9 +28,15 @@ $.ajaxSetup({
         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
         }
-    },
+    }
 });
 
+$(document).ajaxStart(function () {
+    startLoadingAnimation();
+});
+$(document).ajaxStop(function () {
+    stopLoadingAnimation();
+});
 $(document).ajaxError(function (ev, jqxhr, settings, thrownError) {
     let {status, responseText} = jqxhr;
     toastr.error(status + ': ' + responseText, 'Error');
@@ -42,3 +48,31 @@ Handlebars.registerHelper('date', function(date, format) {
     let day = date.getDate();
     return `${year}-${utils.pad(month, 2)}-${utils.pad(day, 2)}`;
 });
+
+
+var animationHanlder = null;
+var _counter = -1;
+function counter() {
+    _counter++;
+    return _counter;
+}
+function startLoadingAnimation() {
+    $('.loading').fadeIn();
+    animationHanlder = setInterval(()=> {
+        let c = counter() % 4;
+        $('.loading span').hide();
+        $('.loading span').each(function () {
+            if (c > 0) {
+                $(this).show();
+            }
+            c --;
+        });
+    }, 100);
+}
+
+function stopLoadingAnimation() {
+    if (animationHanlder) {
+        clearInterval(animationHanlder);
+    }
+    $('.loading').fadeOut();
+}

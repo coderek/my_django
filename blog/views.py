@@ -1,37 +1,44 @@
 from django.template.loader import get_template
 from django.http import HttpResponse
 from blog.models import Post
+from django.views.generic import View
 
 
-def post(request, pk):
-    try:
-        post = Post.objects.get(pk=pk)
-    except:
-        return HttpResponse(status=404)
+class BlogView(View):
 
-    template = get_template('blog/post.html')
-    return HttpResponse(template.render({
-        'p': post,
-        'logged_in': request.user.is_authenticated(),
-        'recent_posts': Post.objects.order_by('-created_at').all()[:10],
-    }))
-
-
-def home(request):
-    template = get_template('blog/home.html')
-    posts = Post.objects.order_by('-created_at').all()
-    return HttpResponse(template.render({
-        'posts': posts,
-        'recent_posts': posts,
-    }))
+    def render_to_response(self, tpl, context):
+        template = get_template(tpl)
+        logged_in = self.request.user.is_authenticated()
+        recent_posts = Post.objects.order_by('-created_at').all()[:10]
+        context.update({
+            'logged_in': logged_in,
+            'recent_posts': recent_posts,
+        })
+        return HttpResponse(template.render(context))
 
 
-def search(request):
-    template = get_template('blog/search.html')
-    term = request.GET.get('search_term', '')
-    posts = Post.objects.order_by('-created_at').filter(title__contains=term)
-    return HttpResponse(template.render({
-        'posts': posts,
-        'recent_posts': posts,
-        'term': term,
-    }))
+class PostView(BlogView):
+    def get(self, request, pk):
+        try:
+            post = Post.objects.get(pk=pk)
+        except:
+            return HttpResponse(status=404)
+
+        return self.render_to_response('blog/post.html', {'p': post})
+
+
+class HomeView(BlogView):
+    def get(self, request):
+        posts = Post.objects.order_by('-created_at').all()
+        return self.render_to_response('blog/home.html', {'posts': posts})
+
+
+class SearchView(BlogView):
+    def get(self, request):
+        term = request.GET.get('search_term', '')
+        found_posts = Post.objects.order_by('-created_at').filter(
+            title__contains=term)
+        return self.render_to_response('blog/search.html', {
+            'term': term,
+            'posts': found_posts,
+        })

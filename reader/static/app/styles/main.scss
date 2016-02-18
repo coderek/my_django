@@ -87,6 +87,10 @@ html, body {
                     display: block;
                 }
                 .entry {
+                    background-color: #ffe;
+                    &.new {
+                        background-color: #fff;
+                    }
                     border-top: 1px solid $entry_border_color;
                     padding: 10px;
                     .title-and-time {
@@ -109,8 +113,14 @@ html, body {
                     }
 
                     .content {
-                        * {
+                        *:not(img) {
                           max-width: 100%;
+                        }
+                        img {
+                          max-width: 50%;
+                          height: auto;
+                          float: left;
+                          margin: 10px;
                         }
                       
                         display: none;
@@ -118,6 +128,8 @@ html, body {
                         border-top: 1px solid black;
                         margin: 10px;
                         padding: 10px;
+                        width: 100%;
+                        overflow: auto;
                     }
                 }
             }

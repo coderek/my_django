@@ -45,6 +45,8 @@ def get_feed(request, feed_id):
         feed = Feed.objects.get(pk=feed_id)
         if do_refresh:
             feed, error = fetch_feed(feed.feed_url)
+            if error:
+                return HttpResponseBadRequest(error)
             return JsonResponse(feed.as_dict(), safe=False)
         else:
             return JsonResponse(feed.as_dict(), safe=False)
