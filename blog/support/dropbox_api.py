@@ -4,13 +4,13 @@ import time
 import contextlib
 from blog.models import Post
 from django.contrib.auth.models import User
+from django.conf import settings
 
-ACCESS_KEY = 'cbG86z6iVHMAAAAAAAAly13mNawyxgHIBr7T1FOMCOINQWnskChxo2-j3uoHoGQB'
 article_dir = '/文章'
 
 
 def load_articles():
-    dbx = dropbox.Dropbox(ACCESS_KEY)
+    dbx = dropbox.Dropbox(settings.DROPBOX_ACCESS_KEY)
     created_count = 0
     for entry in dbx.files_list_folder(article_dir).entries:
         data = download(dbx, entry.path_lower, entry.name)
