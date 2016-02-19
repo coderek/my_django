@@ -7,3 +7,4 @@ markdown2
 feedparser==5.2.1
 pytz
 PyYAML
+dropbox
