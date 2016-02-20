@@ -27,7 +27,7 @@ let FeedView = Marionette.ItemView.extend({
         this.model.entries.fetch();
         this.$el.addClass('selected');
         this.triggerMethod('feed:selected');
-    }
+    },
 });
 
 let EmptyFeedsView = Marionette.ItemView.extend({

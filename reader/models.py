@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -24,7 +25,13 @@ class Feed(models.Model):
             'id': self.id,
             'title': self.title,
             'description': self.description,
+            'count': self.new_entries_count,
         }
+
+    @property
+    def new_entries_count(self):
+        oneday = timedelta(days=1)
+        return self.entry_set.filter(created_at__gte=datetime.today() - oneday).count()
 
     @classmethod
     def feed_list(cls):

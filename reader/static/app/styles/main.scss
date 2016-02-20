@@ -36,7 +36,6 @@ html, body {
 
         display: flex;
         flex-direction: row;
-        
         // justify-content: flex-start; /* align items in Main Axis */
         // align-items: stretch; /* align items in Cross Axis */
         // align-content: stretch; /* Extra space in Cross Axis */
@@ -46,35 +45,47 @@ html, body {
             width: 100%;
             .left.region {
                 border: 1px solid $left_region_border_color;
-                width: 200px;
+                width: 300px;
                 flex: none;
                 overflow: auto;
 
                 .feeds {
                     padding: 0;
                     .feed {
-                        .description {
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                            overflow: hidden;
-                        }
-                        &.selected {
-                            background-color: #eee;
-                        }
-                        cursor: pointer;
-                        &:hover {
-                            background-color: #eee;
-                        }
+                        width: 100%;
+                        display: flex;
                         margin: 0;
                         padding: 4px;
                         border-top: 1px solid #eee;
-                        .title {
-                            font-weight: bold;
+                        .entries-count {
+                            width: 50px;
+                            text-align: center;
+                            flex: none;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
                         }
-                        .description {
-                            font-size: 0.9em;
-                            color: #333;
-                            font-style: italic;
+                        .feed-meta {
+                            flex: 1 1 auto;
+                            overflow: auto;
+                            &.selected {
+                                background-color: #eee;
+                            }
+                            cursor: pointer;
+                            &:hover {
+                                background-color: #eee;
+                            }
+                            .title {
+                                font-weight: bold;
+                            }
+                            .description {
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                font-size: 0.9em;
+                                color: #333;
+                                font-style: italic;
+                            }
                         }
                     }
                 }
