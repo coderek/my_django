@@ -114,7 +114,11 @@ let EntriesManagerView = Marionette.CompositeView.extend({
     events: {
         'click @ui.refresh_btn': 'refreshFeed',
     },
+    collectionEvents: {
+        'sync' () {this.ui.refresh_btn.prop('disabled', false);}
+    },
     refreshFeed() {
+        this.ui.refresh_btn.prop('disabled', true);
         this.triggerMethod('feed:refresh')
     }
 });
@@ -134,6 +138,7 @@ export let MiddleLayout = Marionette.LayoutView.extend({
     showEntries(childView) {
         let selected_feed = childView.model;
         this.getRegion('right').show(new EntriesManagerView({
+            model: selected_feed,
             collection: selected_feed.entries,
         }));
         this.selected_feed = selected_feed;
