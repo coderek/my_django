@@ -66,9 +66,25 @@ let EntryView = Marionette.ItemView.extend({
     className: 'entry',
     ui: {
         'entry_content': '.content',
+        'star': '.title-and-time span:first-child',
+        'title': '.title',
     },
     events: {
-        'click .title': 'openEntry',
+        'click @ui.title': 'openEntry',
+        'click @ui.star': 'toggleStar',
+    },
+    modelEvents: {
+        'change:is_starred': 'updateStar',
+    },
+    updateStar() {
+        if (this.model.get('is_starred')) {
+            this.ui.star.html('&#9733;');
+        } else {
+            this.ui.star.html('&#9734;');
+        }
+    },
+    toggleStar() {
+        this.model.toggleStar();
     },
     openEntry() {
         if (this.$el.is('.open')) {

@@ -22,6 +22,7 @@ let Entry = Backbone.Model.extend({
         'content': '',
         'published': '',
         'url': '',
+        'is_starred': false,
     },
     isNewEntry() {
         let published_date = this.get('published');
@@ -29,6 +30,9 @@ let Entry = Backbone.Model.extend({
         return today.getYear() == published_date.getYear() &&
             today.getMonth() == published_date.getMonth() &&
             today.getDate() == published_date.getDate();
+    },
+    toggleStar() {
+        this.save({is_starred: !this.get('is_starred')});
     },
     parse(data) {
         if (data['published']) {

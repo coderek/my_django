@@ -1,6 +1,7 @@
 <div class="title-and-time">
+    <span>{{# if is_starred }}&#9733; {{else}} &#9734; {{/if }}</span>
     <span class="title">{{ title }}</span>
     <a href="{{ url }}" target="blank">Link</a>
-    <time>{{ date published }} </time> 
+    <time>{{ date published }} </time>
 </div>
 <div class="content"></div>

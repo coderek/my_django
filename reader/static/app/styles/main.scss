@@ -59,7 +59,10 @@ html, body {
                         border-top: 1px solid #eee;
                         .entries-count {
                             width: 50px;
-                            text-align: center;
+                            text-align: right;
+                            padding-right: 10px;
+                            color: #888;
+                            font-weight: bold;
                             flex: none;
                             display: flex;
                             flex-direction: column;
@@ -105,6 +108,12 @@ html, body {
                     border-top: 1px solid $entry_border_color;
                     padding: 10px;
                     .title-and-time {
+                        span:first-child {
+                            margin-right: 10px;
+                            cursor: pointer;
+                            &:hover {
+                            }
+                        }
                         display: flex;
                         a {
                           flex: none;
@@ -136,8 +145,8 @@ html, body {
                       
                         display: none;
                         background-color: #eee;
-                        border-top: 1px solid black;
-                        margin: 10px;
+                        margin: 10px 0;
+                        box-shadow: 0 0 10px 1px #888;
                         padding: 10px;
                         width: 100%;
                         overflow: auto;

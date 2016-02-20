@@ -31,7 +31,8 @@ class Feed(models.Model):
     @property
     def new_entries_count(self):
         oneday = timedelta(days=1)
-        return self.entry_set.filter(created_at__gte=datetime.today() - oneday).count()
+        return self.entry_set.filter(
+            created_at__gte=datetime.today() - oneday).count()
 
     @classmethod
     def feed_list(cls):
@@ -78,4 +79,5 @@ class Entry(models.Model):
             'content': self.content,
             'published': self.published,
             'url': self.url,
+            'is_starred': self.is_starred,
         }

@@ -8,7 +8,7 @@ from django.http import (
 )
 from reader.support.feed import fetch_feed
 import json
-from reader.models import Feed
+from reader.models import Feed, Entry
 
 # logger = logging.getLogger('__name__')
 
@@ -31,6 +31,15 @@ class FeedsView(View):
                 return HttpResponseBadRequest(error)
         except Exception as e:
             return HttpResponseBadRequest(e)
+
+
+def update_entry(request, feed_id, entry_id):
+    if request.method == 'PUT':
+        data = json.loads(request.body)
+        Entry.objects.filter(pk=entry_id).update(**data)
+        return JsonResponse(Entry.objects.filter(pk=entry_id).first().as_dict())
+    else:
+        return HttpResponseBadRequest('Method is not allowed')
 
 
 def feed_entries(request, feed_id):
@@ -58,4 +67,5 @@ urlpatterns = [
     url(r'feeds/?$', FeedsView.as_view()),
     url(r'feeds/(?P<feed_id>\d+)/?$', get_feed),
     url(r'feeds/(?P<feed_id>\d+)/entries/?$', feed_entries),
+    url(r'feeds/(?P<feed_id>\d+)/entries/(?P<entry_id>\d+)?$', update_entry),
 ]
