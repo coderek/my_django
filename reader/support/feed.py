@@ -5,9 +5,11 @@ import pytz
 from time import mktime, localtime
 from reader.models import Feed, Entry
 
+logger = logging.getLogger('django')
+
 
 def fetch_feed(url):
-    logging.warning('fetching feed from {}'.format(url))
+    logger.warning('fetching feed from {}'.format(url))
 
     try:
         f = Feed.objects.get(feed_url=url)
@@ -30,7 +32,7 @@ def fetch_feed(url):
         for entry_item in d['entries']:
             entry = get_entry_obj(entry_item)
             entry['feed'] = f
-            logging.warning(entry['url'])
+            logger.warning(entry['url'])
             Entry.objects.update_or_create(defaults=entry, uuid=entry['uuid'])
 
         return f, None
