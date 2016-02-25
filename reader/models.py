@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
-from django.db import models
+
 from django.contrib.auth.models import User
+from django.db import models
 
 # Create your models here.
 
@@ -35,12 +36,9 @@ class Feed(models.Model):
             created_at__gte=datetime.today() - oneday).count()
 
     @classmethod
-    def feed_list(cls):
+    def all(cls):
         feeds = cls.objects.all()
-        return [
-            f.as_dict()
-            for f in feeds
-        ]
+        return [f.as_dict() for f in feeds]
 
 
 class Category(models.Model):

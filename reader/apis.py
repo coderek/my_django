@@ -1,29 +1,26 @@
+import logging
+
 from django.conf.urls import url
-from django.views.generic import View
 from django.http import (
-    HttpResponseForbidden,
     HttpResponseBadRequest,
     JsonResponse,
-    HttpResponseNotFound,
 )
+
+from reader.models import Entry, Feed
 from reader.support.feed import fetch_feed
-import json
-from reader.models import Feed, Entry
-
-# logger = logging.getLogger('__name__')
+from reader.support.resource import CollectionAPI, ModelAPI
 
 
-class FeedsView(View):
-    def get(self, request):
-        feeds = Feed.feed_list()
-        return JsonResponse(feeds, safe=False)
+logger = logging.getLogger('django')
+
+
+class FeedsView(CollectionAPI):
+    model_cls = Feed
 
     def post(self, request):
-        if not request.user.is_authenticated():
-            return HttpResponseForbidden('Must login')
         try:
-            body = json.loads(request.body)
-            url = body.get('url')
+            # import pdb; pdb.set_trace()
+            url = request.data.get('url')
             m, error = fetch_feed(url)
             if not error:
                 return JsonResponse(m.as_dict(), safe=False)
@@ -33,25 +30,37 @@ class FeedsView(View):
             return HttpResponseBadRequest(e)
 
 
-def update_entry(request, feed_id, entry_id):
-    if request.method == 'PUT':
-        data = json.loads(request.body)
-        Entry.objects.filter(pk=entry_id).update(**data)
-        return JsonResponse(Entry.objects.filter(pk=entry_id).first().as_dict())
-    else:
-        return HttpResponseBadRequest('Method is not allowed')
+class EntryView(ModelAPI):
+    model_cls = Entry
+
+    def prepare(self, request, *args, **kwargs):
+        self.feed = Feed.objects.get(pk=kwargs.get('feed_id'))
+
+    def update(self, request, *args, **kwargs):
+        Entry.objects.filter(pk=self.instance.id).update(**request.data)
+        self.instance.refresh_from_db()
+        return JsonResponse(self.instance.as_dict())
 
 
-def feed_entries(request, feed_id):
-    feed = Feed.objects.get(pk=feed_id)
-    return JsonResponse(
-        [e.as_dict() for e in feed.entry_set.all()], safe=False)
+class EntriesView(CollectionAPI):
+    model_cls = Entry
+
+    def prepare(self, request, *args, **kwargs):
+        self.feed = Feed.objects.get(pk=kwargs.get('feed_id'))
+
+    def index(self, request):
+        return JsonResponse([
+            e.as_dict()
+            for e in self.feed.entry_set.all()], safe=False)
 
 
-def get_feed(request, feed_id):
-    do_refresh = request.GET.get('refresh')
-    try:
-        feed = Feed.objects.get(pk=feed_id)
+class FeedView(ModelAPI):
+    model_cls = Feed
+
+    def get(self, request, *args, **kwargs):
+        do_refresh = request.data.get('refresh')
+        feed = self.instance
+        # import pdb; pdb.set_trace()
         if do_refresh:
             feed, error = fetch_feed(feed.feed_url)
             if error:
@@ -59,13 +68,12 @@ def get_feed(request, feed_id):
             return JsonResponse(feed.as_dict(), safe=False)
         else:
             return JsonResponse(feed.as_dict(), safe=False)
-    except Feed.DoesNotExist:
-        return HttpResponseNotFound('Resource not found')
 
 
 urlpatterns = [
+    # url(r'test/', TestAPIClass.as_view()),
     url(r'feeds/?$', FeedsView.as_view()),
-    url(r'feeds/(?P<feed_id>\d+)/?$', get_feed),
-    url(r'feeds/(?P<feed_id>\d+)/entries/?$', feed_entries),
-    url(r'feeds/(?P<feed_id>\d+)/entries/(?P<entry_id>\d+)?$', update_entry),
+    url(r'feeds/(?P<pk>\d+)/?$', FeedView.as_view()),
+    url(r'feeds/(?P<feed_id>\d+)/entries/?$', EntriesView.as_view()),
+    url(r'feeds/(?P<feed_id>\d+)/entries/(?P<pk>\d+)?$', EntryView.as_view()),
 ]

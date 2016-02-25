@@ -1,10 +1,9 @@
-from django.template.loader import get_template
-from django.http import HttpResponse
+from reader.support.resource import CollectionAPI, BaseView
 
 
-def home(request):
-    tpl = get_template('reader/index.html')
-    return HttpResponse(
-        tpl.render({
-            'is_logged_in': request.user.is_authenticated()
-        }))
+class HomeView(BaseView):
+    template = 'reader/index.html'
+
+
+class TestAPIClass(CollectionAPI):
+    pass
