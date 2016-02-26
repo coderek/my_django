@@ -1,4 +1,5 @@
 import logging
+
 from datetime import datetime
 import feedparser
 import pytz
@@ -29,7 +30,7 @@ def fetch_feed(url):
 
         f, created = Feed.objects.update_or_create(defaults=feed, feed_url=url)
 
-        for entry_item in d['entries']:
+        for _, entry_item in enumerate(d['entries']):
             entry = get_entry_obj(entry_item)
             entry['feed'] = f
             logger.warning(entry['url'])
@@ -37,6 +38,7 @@ def fetch_feed(url):
 
         return f, None
     except Exception as e:
+        logger.error(e)
         return None, e.message
 
 
@@ -77,7 +79,7 @@ def get_entry_obj(source):
         'summary': source.description,
         'content': content,
         'published': to_date_obj(published),
-        'uuid': source.id if 'id' in source else source.title,
+        'uuid': source.id + '+' + source.link if 'id' in source else source.title,
     }
 
 

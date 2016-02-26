@@ -23,6 +23,9 @@ let FeedView = Marionette.ItemView.extend({
     events: {
         'click': 'selected',
     },
+    modelEvents: {
+        'selected': 'selected'
+    },
     selected() {
         this.model.entries.fetch();
         this.$el.addClass('selected');
@@ -110,12 +113,17 @@ let EntriesManagerView = Marionette.CompositeView.extend({
     className: 'entries-manager',
     ui: {
         'refresh_btn': '.js-refresh-feed',
+        'delete_btn': '.js-delete-feed',
     },
     events: {
+        'click @ui.delete_btn': 'deleteFeed',
         'click @ui.refresh_btn': 'refreshFeed',
     },
     collectionEvents: {
         'sync' () {this.ui.refresh_btn.prop('disabled', false);}
+    },
+    deleteFeed() {
+        this.triggerMethod('feed:delete');
     },
     refreshFeed() {
         this.ui.refresh_btn.prop('disabled', true);
@@ -134,6 +142,16 @@ export let MiddleLayout = Marionette.LayoutView.extend({
     childEvents: {
         'feed:selected': 'showEntries',
         'feed:refresh': 'refreshSelectedFeed',
+        'feed:delete': 'deleteFeed',
+    },
+    deleteFeed(childView) {
+        let feed = childView.model;
+        feed.destroy({success: ()=> toastr.success(feed.get('title') + ' is deleted.')});
+        if (feeds.isEmpty()) {
+            this.getRegion('right').empty();
+        } else {
+            feeds.first().trigger('selected'); 
+        }
     },
     showEntries(childView) {
         let selected_feed = childView.model;

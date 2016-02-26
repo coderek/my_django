@@ -75,6 +75,13 @@ class TestFeed(TestCase):
         assert Feed.objects.count() == 1
         assert Entry.objects.count() > 0
 
+    def test_terry(self):
+        url = 'http://terrytai.me/rss.xml'
+        fetch_feed(url)
+
+        assert Feed.objects.count() == 1
+        assert Entry.objects.count() == 10
+
 
 class TestUpdateFeeds(TestCase):
     fixtures = ['feeds.yaml']

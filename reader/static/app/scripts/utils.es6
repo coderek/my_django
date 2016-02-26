@@ -5,7 +5,10 @@ function get_feed_url(ev) {
 export function try_create_feed(feeds) {
     let url = get_feed_url();
     if (url) {
-        feeds.create({url}, {wait: true});
+        feeds.create({url}, {
+            wait: true,
+            success: ()=> toastr.success('Created!')
+        });
     }
 }
 

@@ -19,6 +19,7 @@ header h1 {
 
 .content.body {
     display: flex;
+    border: 1px solid #eee;
 }
 
 .content .main {
@@ -58,8 +59,8 @@ div.article {
     margin-bottom: 30px;
     border-radius: 10px;
     color: #333;
-    font-family: 'Headland One', serif;
-    font-size: 0.8em;
+    /*font-family: 'Headland One', serif;*/
+    font-size: 1em;
     padding: 5px 10px;
 }
 
@@ -79,6 +80,8 @@ div.article {
 
 .article .more {
     margin-top: 10px;
+    margin-right: 10px;
+    text-align: right;
 }
 
 nav.side-menu {

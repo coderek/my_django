@@ -14,7 +14,7 @@
             {{ p.body_snippet|replace("\n", "<br>")|safe }}
         </div>
         <div class="more">
-            <a href="{{ url('post', args=[p.id]) }}">More</a>
+            <a href="{{ url('post', args=[p.id]) }}">>> More</a>
         </div>
     </div>
     {% endfor %}
