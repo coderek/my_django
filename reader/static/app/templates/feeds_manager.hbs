@@ -1,1 +1,15 @@
-<ul class="feeds list-unstyled"></ul>
+<ul class="feeds list-unstyled">
+    {{#each feeds}}
+    <div class="feed" data-id="{{id}}">
+        <div class="feed-meta">
+            <div class="title">{{ title }}</div>
+            <div class="description">{{ description }}</div>
+        </div>
+        <div class="entries-count">
+            <span>
+                {{ count }}
+            </span>
+        </div>
+    </div>
+    {{/each}}
+</ul>

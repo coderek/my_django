@@ -1,19 +1,20 @@
-let Feed = Backbone.Model.extend({
+let SubCollectionMixin = {
     parse(data) {
-        if (_.has(data, 'id') && !this.entries) {
-            this.entries = new Entries;
-            this.entries.url = `/reader/api/feeds/${data['id']}/entries`;
+        if (this.isNew() && _.has(data, this.idAttribute) && this.sub_collection) {
+            let {name, SubCollection} = this.sub_collection;
+            this[name] = new SubCollection;
+            this._setup_sub_events(name, this[name]);
+            let base = this.url() + `/${data["id"]}`;
+            this[name].url = `${base}/${name}`;
         }
         return Backbone.Model.prototype.parse.apply(this, arguments);
     },
-    refresh() {
-        this.fetch({data: {refresh: true}}).then(()=>this.entries.fetch());
-    }
-});
-let Feeds = Backbone.Collection.extend({
-    model: Feed,
-    url: '/reader/api/feeds',
-});
+    _setup_sub_events(name, collection) {
+        this.listenTo(collection, 'sync', ()=> {
+            this.trigger(`${name}:sync`, collection);
+        });
+    },
+};
 
 let Entry = Backbone.Model.extend({
     defaults: {
@@ -44,6 +45,7 @@ let Entry = Backbone.Model.extend({
         return this.get('content') || this.get('summary');
     }
 });
+
 let Entries = Backbone.Collection.extend({
     comparator(e1, e2) {
         let p1 = e1.get('published').valueOf();
@@ -53,5 +55,35 @@ let Entries = Backbone.Collection.extend({
     model: Entry,
 });
 
-let feeds = new Feeds;
-export {feeds};
+let Feed = Backbone.Model.extend({
+    sub_collection: {
+        SubCollection: Entries,
+        name: 'entries',
+    },
+    refresh() {
+        this.fetch({data: {refresh: true}}).then(()=>this.entries.fetch());
+    }
+}).extend(SubCollectionMixin);
+
+let Feeds = Backbone.Collection.extend({
+    model: Feed,
+    url: '/reader/api/feeds',
+});
+
+let Category = Backbone.Model.extend({
+    sub_collection: {
+        SubCollection: Feeds,
+        name: 'feeds',
+    },
+    defaults: {
+        name: 'default'
+    },
+}).extend(SubCollectionMixin);
+
+let Categories = Backbone.Collection.extend({
+    model: Category,
+    url: '/reader/api/categories',
+});
+
+let categories = new Categories;
+export {categories};

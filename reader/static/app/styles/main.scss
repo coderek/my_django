@@ -51,46 +51,6 @@ html, body {
 
                 .feeds {
                     padding: 0;
-                    .feed {
-                        width: 100%;
-                        display: flex;
-                        margin: 0;
-                        padding: 4px;
-                        border-top: 1px solid #eee;
-                        .entries-count {
-                            width: 50px;
-                            text-align: right;
-                            padding-right: 10px;
-                            color: #888;
-                            font-weight: bold;
-                            flex: none;
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                        }
-                        .feed-meta {
-                            flex: 1 1 auto;
-                            overflow: auto;
-                            &.selected {
-                                background-color: #eee;
-                            }
-                            cursor: pointer;
-                            &:hover {
-                                background-color: #eee;
-                            }
-                            .title {
-                                font-weight: bold;
-                            }
-                            .description {
-                                text-overflow: ellipsis;
-                                white-space: nowrap;
-                                overflow: hidden;
-                                font-size: 0.9em;
-                                color: #333;
-                                font-style: italic;
-                            }
-                        }
-                    }
                 }
             }
             .right.region {
@@ -102,58 +62,6 @@ html, body {
                 }
                 .feed-title {
                     color: white;
-                }
-                .entry {
-                    background-color: #ffe;
-                    &.new {
-                        background-color: #fff;
-                    }
-                    border-top: 1px solid $entry_border_color;
-                    padding: 10px;
-                    .title-and-time {
-                        span:first-child {
-                            margin-right: 10px;
-                            cursor: pointer;
-                            &:hover {
-                            }
-                        }
-                        display: flex;
-                        a {
-                          flex: none;
-                        }
-                        time {
-                          width: 100px;
-                          text-align: right;
-                        }
-                        .title {
-                          flex-grow: 1;
-                        }
-                    }
-                    .title {
-                        font-size: 1em;
-                        cursor: pointer;
-                        user-select: none;
-                    }
-
-                    .content {
-                        *:not(img) {
-                          max-width: 100%;
-                        }
-                        img {
-                          max-width: 50%;
-                          height: auto;
-                          float: left;
-                          margin: 10px;
-                        }
-                      
-                        display: none;
-                        background-color: #eee;
-                        margin: 10px 0;
-                        box-shadow: 0 0 10px 1px #888;
-                        padding: 10px;
-                        width: 100%;
-                        overflow: auto;
-                    }
                 }
             }
         }
@@ -189,3 +97,7 @@ html, body {
         @extend .btn-xs;
     }
 }
+
+@import './category';
+@import './feed';
+@import './entry';

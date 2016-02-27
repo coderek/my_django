@@ -1,0 +1,52 @@
+.entry {
+    background-color: #ffe;
+    &.new {
+        background-color: #fff;
+    }
+    border-top: 1px solid $entry_border_color;
+    padding: 10px;
+    .title-and-time {
+        span:first-child {
+            margin-right: 10px;
+            cursor: pointer;
+            &:hover {
+            }
+        }
+        display: flex;
+        a {
+            flex: none;
+        }
+        time {
+            width: 100px;
+            text-align: right;
+        }
+        .title {
+            flex-grow: 1;
+        }
+    }
+    .title {
+        font-size: 1em;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .content {
+        *:not(img) {
+            max-width: 100%;
+        }
+        img {
+            max-width: 50%;
+            height: auto;
+            float: left;
+            margin: 10px;
+        }
+
+        display: none;
+        background-color: #eee;
+        margin: 10px 0;
+        box-shadow: 0 0 10px 1px #888;
+        padding: 10px;
+        width: 100%;
+        overflow: auto;
+    }
+}

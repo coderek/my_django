@@ -6,7 +6,7 @@ from django.http import (
     JsonResponse,
 )
 
-from reader.models import Entry, Feed
+from reader.models import Category, Entry, Feed
 from reader.support.feed import fetch_feed
 from reader.support.resource import CollectionAPI, ModelAPI
 
@@ -51,7 +51,7 @@ class EntriesView(CollectionAPI):
     def index(self, request):
         return JsonResponse([
             e.as_dict()
-            for e in self.feed.entry_set.all()], safe=False)
+            for e in self.feed.entries.all()], safe=False)
 
 
 class FeedView(ModelAPI):
@@ -69,8 +69,12 @@ class FeedView(ModelAPI):
         return JsonResponse(feed.as_dict(), safe=False)
 
 
+class CategoryView(CollectionAPI):
+    model_cls = Category
+
 urlpatterns = [
     # url(r'test/', TestAPIClass.as_view()),
+    url(r'categories/?$', CategoryView.as_view()),
     url(r'feeds/?$', FeedsView.as_view()),
     url(r'feeds/(?P<pk>\d+)/?$', FeedView.as_view()),
     url(r'feeds/(?P<feed_id>\d+)/entries/?$', EntriesView.as_view()),

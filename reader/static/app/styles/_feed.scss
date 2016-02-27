@@ -1,0 +1,40 @@
+.feed {
+    width: 100%;
+    display: flex;
+    margin: 0;
+    padding: 4px;
+    border-top: 1px solid #eee;
+    .entries-count {
+        width: 50px;
+        text-align: right;
+        padding-right: 10px;
+        color: #888;
+        font-weight: bold;
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .feed-meta {
+        flex: 1 1 auto;
+        overflow: auto;
+        &.selected {
+            background-color: #eee;
+        }
+        cursor: pointer;
+        &:hover {
+            background-color: #eee;
+        }
+        .title {
+            font-weight: bold;
+        }
+        .description {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            font-size: 0.9em;
+            color: #333;
+            font-style: italic;
+        }
+    }
+}

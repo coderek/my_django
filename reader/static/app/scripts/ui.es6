@@ -1,9 +1,10 @@
-import {feeds} from './models';
+import {categories} from './models';
 import * as utils from './utils';
 import {default as feed_tpl} from 'templates/feed';
 import {default as entry_tpl} from 'templates/entry';
+import {default as category_tpl} from 'templates/category';
 import {default as top_region_tpl} from 'templates/top_region';
-import {default as feeds_manager_tpl} from 'templates/feeds_manager';
+import {default as categories_manager_tpl} from 'templates/categories_manager';
 import {default as entries_manager_tpl} from 'templates/entries_manager';
 import {default as middle_layout_tpl} from 'templates/middle_layout';
 import {default as no_feeds_tpl} from 'templates/no_feeds';
@@ -44,11 +45,41 @@ let EmptyFeedsView = Marionette.ItemView.extend({
     }
 });
 
-let FeedsManagerView = Marionette.CompositeView.extend({
-    template: feeds_manager_tpl,
-    childViewContainer: '.feeds',
-    childView: FeedView,
-    className: 'feeds-manager',
+
+/**
+ * feeds manager is a heirachical structure containing categries of feeds
+ */
+
+let CategoryView = Marionette.ItemView.extend({
+    template: category_tpl,
+    tagName: 'li',
+    className: 'category',
+    selected() {
+        this.model.feeds.fetch({reset: true});
+    },
+    modelEvents: {
+        'feeds:sync': 'render',
+    },
+    events: {
+        'click .feed': 'feedSelected',
+    },
+    feedSelected(ev) {
+        let feed_id = $(ev.currentTarget).data('id');
+        let feed = this.model.feeds.get(feed_id);
+        this.triggerMethod('feed:selected', feed);
+    },
+    templateHelpers() {
+        return {
+            'feeds': this.model.feeds.toJSON(),
+        };
+    }
+});
+
+let CategoriesManager = Marionette.CompositeView.extend({
+    template: categories_manager_tpl,
+    childViewContainer: '.categories',
+    childView: CategoryView,
+    className: 'categories-manager',
     emptyView: EmptyFeedsView,
     onRenderCollection () {
         this.children.first().selected();
@@ -111,6 +142,9 @@ let EntriesManagerView = Marionette.CompositeView.extend({
     childViewContainer: '.entries',
     childView: EntryView,
     className: 'entries-manager',
+    initialize() {
+        this.collection.fetch({reset: true});
+    },
     ui: {
         'refresh_btn': '.js-refresh-feed',
         'delete_btn': '.js-delete-feed',
@@ -153,8 +187,8 @@ export let MiddleLayout = Marionette.LayoutView.extend({
             feeds.first().trigger('selected'); 
         }
     },
-    showEntries(childView) {
-        let selected_feed = childView.model;
+    showEntries(childView, feed) {
+        let selected_feed = feed;
         this.getRegion('right').show(new EntriesManagerView({
             model: selected_feed,
             collection: selected_feed.entries,
@@ -168,8 +202,8 @@ export let MiddleLayout = Marionette.LayoutView.extend({
         }
     },
     onRender() {
-        this.getRegion('left').show(new FeedsManagerView({
-            collection: feeds,
+        this.getRegion('left').show(new CategoriesManager({
+            collection: categories,
         }));
     },
 });

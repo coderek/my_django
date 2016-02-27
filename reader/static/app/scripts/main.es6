@@ -1,5 +1,5 @@
 import './setup';
-import {feeds} from './models';
+import {categories} from './models';
 import {TopRegionView, MiddleLayout} from './ui';
 
 
@@ -13,7 +13,7 @@ app.addRegions({
 app.on('start', ()=> {
     app.getRegion('top_region').show(new TopRegionView);
     app.getRegion('middle_region').show(new MiddleLayout);
-    feeds.fetch({reset: true});
+    categories.fetch({reset: true});
 });
 
 $(()=>app.start());

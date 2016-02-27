@@ -1,4 +1,5 @@
 import * as utils from './utils';
+import {default as feeds_tpl} from 'templates/feeds_manager';
 // using jQuery
 function getCookie(name) {
     var cookieValue = null;
@@ -48,6 +49,8 @@ Handlebars.registerHelper('date', function(date, format) {
     let day = date.getDate();
     return `${year}-${utils.pad(month, 2)}-${utils.pad(day, 2)}`;
 });
+
+Handlebars.registerPartial('feeds_tpl', feeds_tpl);
 
 
 var animationHanlder = null;
