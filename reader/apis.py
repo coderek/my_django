@@ -65,9 +65,8 @@ class FeedView(ModelAPI):
             feed, error = fetch_feed(feed.feed_url)
             if error:
                 return HttpResponseBadRequest(error)
-            return JsonResponse(feed.as_dict(), safe=False)
-        else:
-            return JsonResponse(feed.as_dict(), safe=False)
+
+        return JsonResponse(feed.as_dict(), safe=False)
 
 
 urlpatterns = [

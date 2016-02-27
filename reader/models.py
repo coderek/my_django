@@ -21,7 +21,7 @@ class Feed(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
     def __unicode__(self):
-        return self.title
+        return u'{} ({})'.format(self.title, self.category.name)
 
     def as_dict(self):
         return {
@@ -51,7 +51,7 @@ class Tag(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
     def __unicode__(self):
-        return '{}: {} entries'.format(self.name, self.entries.count())
+        return u'{}: {} entries'.format(self.name, self.entries.count())
 
 
 class Category(models.Model):
@@ -61,7 +61,7 @@ class Category(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
     def __unicode__(self):
-        return '{}: {} entries'.format(self.name, self.feeds.count())
+        return u'{}: {} feeds'.format(self.name, self.feeds.count())
 
 
 class Entry(models.Model):
