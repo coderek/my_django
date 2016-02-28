@@ -1,0 +1,50 @@
+.article {
+    margin-bottom: 30px;
+    border-radius: 10px;
+    color: #333;
+    /*font-family: 'Headland One', serif;*/
+    font-size: 1em;
+    padding: 5px 30px;
+
+    pre {
+        word-wrap: break-word;
+    }
+
+    .title {
+        margin-top: 20px;
+        border-left: 10px solid #aaa;
+        padding-left: 20px;
+        margin-bottom: 10px;
+        font-size: 14pt;
+    }
+
+    .title + time {
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .more {
+        a {
+            color: #aaa;
+        }
+        margin-top: 10px;
+        margin-right: 10px;
+        text-align: right;
+    }
+
+    .body {
+        p:first-child {
+            margin-top: 30px;
+        }
+        p {
+            margin-bottom: 30px;
+            text-indent: 50px;
+        }
+    }
+
+    .body:after {
+        content: 'E.O.A';
+    }
+
+}
+

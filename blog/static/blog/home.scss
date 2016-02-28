@@ -1,52 +1,76 @@
+$rad: 10px;
+
 html {
     width: 100%;
-    font-family: monospace;
 }
 body {
+    background-color: #333;
     width: 100%;
-    background-color: milk;
     margin: 10px auto;
 }
 
-header h1 {
+header {
+    h1 {
+        margin: 0;
+        padding: 10px;
+    }
+    .content {
+        border-top-left-radius: $rad;
+        border-top-right-radius: $rad;
+    }
+}
+
+footer {
+    div {
+        padding: 0 10px;
+    }
+    .content {
+        border-bottom-left-radius: $rad;
+        border-bottom-right-radius: $rad;
+    }
 }
 
 .content {
-    width: 80%;
+    width: 60%;
     padding: 10px;
+    background-color: #eee;
     margin: 0 auto;
+
+    .main {
+        flex: 1 1 auto;
+    }
+
+    .main + nav {
+        /* disable side menu first */
+        display: none;
+
+        flex: none;
+        width: 30%;
+    }
+
 }
 
 .content.body {
     display: flex;
-    border: 1px solid #eee;
-}
-
-.content .main {
-    flex: 1 1 auto;
-}
-
-.main + nav {
-    flex: none;
-    width: 300px;
 }
 
 
 a {
     text-decoration: none;
     color: black;
-}
-
-.menu li {
-    padding: 4px;
-    border: #ddd;
-    float: left;
-    list-style: none;
-    width: 60px;
+    word-break: break-all;
 }
 
 .menu {
-    background: #eee;
+    background: #aaa;
+    margin: 0 -10px;
+    li {
+        padding: 4px;
+        border: #ddd;
+        float: left;
+        list-style: none;
+        width: 60px;
+    }
 }
 
 ul:after {
@@ -55,53 +79,26 @@ ul:after {
     clear: both;
 }
 
-div.article {
-    margin-bottom: 30px;
-    border-radius: 10px;
-    color: #333;
-    /*font-family: 'Headland One', serif;*/
-    font-size: 1em;
-    padding: 5px 10px;
-}
-
-.article pre {
-    word-wrap: break-word;
-}
-
-.article .title {
-    margin-bottom: 10px;
-    font-size: 14pt;
-}
-
-.article .title + time {
-    margin-bottom: 10px;
-    display: block;
-}
-
-.article .more {
-    margin-top: 10px;
-    margin-right: 10px;
-    text-align: right;
-}
-
 nav.side-menu {
     border-left: 1px solid #eee;
     padding-left: 4px;
     padding: 10px;
 }
 
-nav.side-menu ul {
-    list-style: none;
-    padding: 0;
-}
-
-nav.side-menu li {
-    padding: 0;
-    margin: 0;
+nav.side-menu {
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    li {
+        padding: 0;
+        margin: 0;
+    }
 }
 
 input.search {
-    width: 200px;
+    max-width: 200px;
 }
 
-
+@import './article';
+@import './responsive';

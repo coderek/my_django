@@ -1,0 +1,40 @@
+$break-tiny: 500px;
+$break-small: 700px;
+$break-large: 1200px;
+
+body {
+    @media screen and (max-width: $break-tiny) {
+        margin: 0;
+        background-color: #eee;
+        .content {
+            width: 100% !important;
+            padding: 0;
+            margin: 0;
+        }
+        .side-menu {
+            display: none;
+        }
+
+        .menu {
+            margin: 0;
+        }
+
+        .article {
+            .body {
+                p {
+                    text-indent: 20px;
+                }
+            }
+            
+        }
+    }
+
+    @media screen and (max-width: $break-small) {
+        margin: 0;
+        .content {
+            width: 80%;
+        }
+    }
+    @media screen and (min-width: $break-large) {
+    }
+}
