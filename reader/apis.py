@@ -3,12 +3,14 @@ import logging
 from django.conf.urls import url
 from django.http import (
     HttpResponseBadRequest,
-    JsonResponse,
 )
 
 from reader.models import Category, Entry, Feed
 from reader.support.feed import fetch_feed
-from reader.support.resource import CollectionAPI, ModelAPI
+from reader.support.resource import (
+    CollectionAPI,
+    ModelAPI,
+)
 
 
 logger = logging.getLogger('django')
@@ -21,9 +23,11 @@ class FeedsView(CollectionAPI):
         try:
             # import pdb; pdb.set_trace()
             url = request.data.get('url')
+            if Feed.objects.filter(feed_url=url).exists():
+                return HttpResponseBadRequest('Already exists!')
             m, error = fetch_feed(url)
             if not error:
-                return JsonResponse(m.as_dict(), safe=False)
+                return self.json_response(m)
             else:
                 return HttpResponseBadRequest(error)
         except Exception as e:
@@ -39,7 +43,7 @@ class EntryView(ModelAPI):
     def update(self, request, *args, **kwargs):
         Entry.objects.filter(pk=self.instance.id).update(**request.data)
         self.instance.refresh_from_db()
-        return JsonResponse(self.instance.as_dict())
+        return self.json_response(self.instance)
 
 
 class EntriesView(CollectionAPI):
@@ -49,9 +53,7 @@ class EntriesView(CollectionAPI):
         self.feed = Feed.objects.get(pk=kwargs.get('feed_id'))
 
     def index(self, request):
-        return JsonResponse([
-            e.as_dict()
-            for e in self.feed.entries.all()], safe=False)
+        return self.json_response(self.feed.entries)
 
 
 class FeedView(ModelAPI):
@@ -66,7 +68,7 @@ class FeedView(ModelAPI):
             if error:
                 return HttpResponseBadRequest(error)
 
-        return JsonResponse(feed.as_dict(), safe=False)
+        return self.json_response(feed)
 
 
 class CategoryView(CollectionAPI):

@@ -1,5 +1,10 @@
 import {categories} from './models';
 import * as utils from './utils';
+
+// templates
+
+import {default as new_feed_form_tpl} from 'templates/new_feed_form';
+import {default as reader_tpl} from 'templates/reader_layout';
 import {default as feed_tpl} from 'templates/feed';
 import {default as entry_tpl} from 'templates/entry';
 import {default as category_tpl} from 'templates/category';
@@ -7,33 +12,8 @@ import {default as top_region_tpl} from 'templates/top_region';
 import {default as categories_manager_tpl} from 'templates/categories_manager';
 import {default as entries_manager_tpl} from 'templates/entries_manager';
 import {default as middle_layout_tpl} from 'templates/middle_layout';
-import {default as no_feeds_tpl} from 'templates/no_feeds';
 
-let FeedView = Marionette.ItemView.extend({
-    template: feed_tpl,
-    tagName: 'li',
-    className: 'feed',
-    attributes() {
-        return {
-            'data-id': ()=>this.model.id,
-        };
-    },
-    ui: {
-        'title': '.title',
-    },
-    events: {
-        'click': 'selected',
-    },
-    modelEvents: {
-        'selected': 'selected'
-    },
-    selected() {
-        this.model.entries.fetch();
-        this.$el.addClass('selected');
-        this.triggerMethod('feed:selected');
-    },
-});
-
+/*
 let EmptyFeedsView = Marionette.ItemView.extend({
     template: no_feeds_tpl,
     className: 'empty-view',
@@ -41,9 +21,10 @@ let EmptyFeedsView = Marionette.ItemView.extend({
         'click .js-add-feed': 'create_feed',
     },
     create_feed() {
-        utils.try_create_feed(feeds);
+        this.triggerMethod('feed:create');
     }
 });
+*/
 
 
 /**
@@ -54,6 +35,12 @@ let CategoryView = Marionette.ItemView.extend({
     template: category_tpl,
     tagName: 'li',
     className: 'category',
+    // emptyView: EmptyFeedsView,
+
+    initialize() {
+        this.listenTo(this.model.feeds, 'change destroy reset', this.render);
+        this.listenTo(this.model.feeds, 'selected', this.feedSelected);
+    },
     selected() {
         this.model.feeds.fetch({reset: true});
         this.ui.expander.removeClass('collapsed');
@@ -63,10 +50,17 @@ let CategoryView = Marionette.ItemView.extend({
     },
     modelEvents: {
         'feeds:sync': 'render',
+        'selected': 'showDefaultView',
     },
     events: {
         'click .feed': 'feedSelected',
         'click @ui.expander': 'expand',
+    },
+    triggers: {
+        'click .js-add-feed': 'feed:create',
+    },
+    showDefaultView() {
+        this.model.feeds.first().selected();
     },
     hideFeeds() {
         this.$('.feeds').remove();
@@ -80,8 +74,13 @@ let CategoryView = Marionette.ItemView.extend({
             this.hideFeeds();
         }
     },
-    feedSelected(ev) {
-        let feed_id = $(ev.currentTarget).data('id');
+    feedSelected(ev_or_model) {
+        var feed_id;
+        if (ev_or_model instanceof Backbone.Model) {
+            feed_id = ev_or_model.id;
+        } else {
+            feed_id = $(ev_or_model.currentTarget).data('id');
+        }
         let feed = this.model.feeds.get(feed_id);
         this.triggerMethod('feed:selected', feed);
     },
@@ -97,7 +96,6 @@ let CategoriesManager = Marionette.CompositeView.extend({
     childViewContainer: '.categories',
     childView: CategoryView,
     className: 'categories-manager',
-    emptyView: EmptyFeedsView,
     onRenderCollection () {
         this.children.first().selected();
     },
@@ -108,7 +106,7 @@ let CategoriesManager = Marionette.CompositeView.extend({
                     v.$el.removeClass('selected');
                 }
             });
-        }
+        },
     }
 });
 
@@ -182,7 +180,7 @@ let EntriesManagerView = Marionette.CompositeView.extend({
     }
 });
 
-export let MiddleLayout = Marionette.LayoutView.extend({
+let MiddleLayout = Marionette.LayoutView.extend({
     tagName: 'div',
     className: 'middle-layout',
     template: middle_layout_tpl,
@@ -194,14 +192,19 @@ export let MiddleLayout = Marionette.LayoutView.extend({
         'feed:selected': 'showEntries',
         'feed:refresh': 'refreshSelectedFeed',
         'feed:delete': 'deleteFeed',
+        'feed:create'() {
+            this.triggerMethod('feed:create');
+        }
     },
     deleteFeed(childView) {
         let feed = childView.model;
+        let feeds = feed.collection;
         feed.destroy({success: ()=> toastr.success(feed.get('title') + ' is deleted.')});
         if (feeds.isEmpty()) {
             this.getRegion('right').empty();
         } else {
-            feeds.first().trigger('selected'); 
+            var first = feeds.first();
+            first.trigger('selected', first);
         }
     },
     showEntries(childView, feed) {
@@ -225,17 +228,14 @@ export let MiddleLayout = Marionette.LayoutView.extend({
     },
 });
 
-export let TopRegionView = Marionette.ItemView.extend({
+
+let TopRegionView = Marionette.ItemView.extend({
     template: top_region_tpl,
-    className: 'container',
     ui: {
         'add_button': '#add_feed',
     },
-    events: {
-        'click @ui.add_button': 'create_feed',
-    },
-    create_feed() {
-        utils.try_create_feed(feeds);
+    triggers: {
+        'click @ui.add_button': 'feed:create',
     },
     templateHelpers() {
         return {
@@ -243,3 +243,76 @@ export let TopRegionView = Marionette.ItemView.extend({
         };
     },
 });
+
+
+let PopupMixin = {
+    getTemplate() {
+        let originalTemplate = this.constructor.__super__.getTemplate();
+        return () => {
+            return `<div class='popup'>${originalTemplate.call(this)}</div>`;
+        };
+    },
+};
+
+
+let NewFeedForm = Marionette.ItemView.extend({
+    template: new_feed_form_tpl,
+    events: {
+        'submit form': 'submitForm',
+    },
+    onShow() {
+        this.$('input').focus();
+    },
+    submitForm(ev) {
+        let data = this.$('form').serializeObject();
+        let category = categories.get(data['category']);
+        this.$('input, button').prop('disabled', true);
+        category.feeds.create({url: data['new_feed_url']}, {
+            wait: true,
+            success: (m)=> {
+                this.triggerMethod('feed:added');
+                toastr.success(`"${m.get('title')}" is added!`);
+                this.$('input, button').prop('disabled', false);
+            },
+            error: ()=> {
+                this.$('input, button').prop('disabled', false);
+            },
+        });
+        return false;
+    }
+}).extend(PopupMixin);
+
+export let ReaderLayout = Marionette.LayoutView.extend({
+    el: '#reader',
+    template: reader_tpl,
+    regions: {
+        popup: '#popup_region',
+        top: '#top_region',
+        middle: '#middle_region',
+        bottom: '#bottom_region',
+    },
+
+    events: {
+        'click #popup_region'(ev) {
+            if ($(ev.target).parent().is('#popup_region'))
+                this.getRegion('popup').empty();
+        }
+    },
+
+    onRender() {
+        this.getRegion('top').show(new TopRegionView);
+        this.getRegion('middle').show(new MiddleLayout);
+    },
+
+    childEvents: {
+        'feed:create': 'showCreateFeedView',
+        'feed:added': 'closeCreateFeedView',
+    },
+    closeCreateFeedView() {
+        this.getRegion('popup').empty();
+    },
+    showCreateFeedView() {
+        this.getRegion('popup').show(new NewFeedForm);
+    },
+});
+

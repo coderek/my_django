@@ -1,5 +1,8 @@
+import logging
 import json
 
+from django.db import models
+from django.db.models.query import QuerySet
 from django.http import (
     HttpResponse,
     HttpResponseForbidden,
@@ -9,6 +12,8 @@ from django.http import (
 )
 from django.template.loader import get_template
 from django.views.generic import View
+
+logger = logging.getLogger('django')
 
 
 class InvalidDataException(Exception):
@@ -87,6 +92,20 @@ class BaseView(View):
     def get(self, request):
         tpl = get_template(self.template)
         return HttpResponse(tpl.render(self.get_context()))
+
+    def json_response(self, data_or_model):
+        res = {}
+        if (isinstance(data_or_model, models.Manager) or
+                isinstance(data_or_model, QuerySet)):
+            data_or_model = [d.as_dict() for d in data_or_model.all()]
+
+        if isinstance(data_or_model, models.Model):
+            res = data_or_model.as_dict()
+            res.update({'id': data_or_model.id})
+        else:
+            res = data_or_model
+
+        return JsonResponse(res, safe=False)
 
 
 class CollectionAPI(BaseView):

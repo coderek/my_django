@@ -67,12 +67,15 @@ html, body {
         }
     }
     #bottom_region {
-        @extend .inset-text;
         box-shadow: 0 -1px 10px #333;
         z-index: 10;
         background-color: $bottom_bg_color;
         padding: 10px;
-        color: #888;
+        a {
+            @extend .inset-text;
+            color: #888;
+            text-decoration: none;
+        }
         font-size: 0.8em;
         flex: 0 1 auto;
     }
@@ -98,6 +101,16 @@ html, body {
     }
 }
 
+
+select, input[type=text] {
+    width: 100%;
+    margin: 10px 0;
+    height: 2.0em;
+}
+
+
 @import './category';
 @import './feed';
 @import './entry';
+@import './popup';
+@import './responsive';

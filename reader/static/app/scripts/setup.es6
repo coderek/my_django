@@ -1,5 +1,6 @@
 import * as utils from './utils';
 import {default as feeds_tpl} from 'templates/feeds_manager';
+import {default as no_feeds_tpl} from 'templates/no_feeds';
 // using jQuery
 function getCookie(name) {
     var cookieValue = null;
@@ -51,6 +52,7 @@ Handlebars.registerHelper('date', function(date, format) {
 });
 
 Handlebars.registerPartial('feeds_tpl', feeds_tpl);
+Handlebars.registerPartial('no_feeds_tpl', no_feeds_tpl);
 
 
 var animationHanlder = null;
@@ -79,3 +81,20 @@ function stopLoadingAnimation() {
     }
     $('.loading').fadeOut();
 }
+
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};

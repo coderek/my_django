@@ -1,18 +1,13 @@
 import './setup';
 import {categories} from './models';
-import {TopRegionView, MiddleLayout} from './ui';
+import {ReaderLayout} from './ui';
 
-
-let app = new Marionette.Application;
-app.addRegions({
-    top_region: '#top_region',
-    middle_region: '#middle_region',
-    bottom_region: '#bottom_region',
-});
+let ReaderApp = Marionette.Application;
+let app = new ReaderApp;
+app.rootView = new ReaderLayout;
 
 app.on('start', ()=> {
-    app.getRegion('top_region').show(new TopRegionView);
-    app.getRegion('middle_region').show(new MiddleLayout);
+    app.rootView.render();
     categories.fetch({reset: true});
 });
 

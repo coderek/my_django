@@ -1,11 +1,10 @@
 .category {
     >.meta{
         display: flex;
-        background-color: black;
+        background-color: #456;
         color: white;
-        padding: 10px;
+        padding: 6px 10px;
         text-transform: capitalize;
-        line-height: 1.2em;
 
         :first-child {
             flex: 1 0 auto;

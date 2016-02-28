@@ -1,0 +1,32 @@
+$break-tiny: 500px;
+$break-small: 700px;
+$break-large: 1200px;
+
+body {
+    @media screen and (max-width: $break-tiny) {
+        .middle-layout {
+            .left.region {
+                width: 200px !important;
+            }
+            .right.region {
+                .entry {
+                    padding: 0;
+                    .title-and-time {
+                        display: block !important;
+                        .title {
+                            display: block !important;
+                        }
+                    }
+                    .content {
+                        margin: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    @media screen and (max-width: $break-small) {
+    }
+    @media screen and (min-width: $break-large) {
+    }
+}

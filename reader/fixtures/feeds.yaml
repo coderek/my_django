@@ -62,3 +62,12 @@
   pk: 76
   fields:
     feed_url: http://planetpython.org/rss20.xml
+- model: reader.feed
+  pk: 77
+  fields:
+    feed_url: http://feeds.feedburner.com/zhihu-daily
+- model: reader.feed
+  pk: 78
+  fields:
+    feed_url: http://www.zhihu.com/rss
+
