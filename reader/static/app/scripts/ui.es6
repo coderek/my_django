@@ -56,12 +56,29 @@ let CategoryView = Marionette.ItemView.extend({
     className: 'category',
     selected() {
         this.model.feeds.fetch({reset: true});
+        this.ui.expander.removeClass('collapsed');
+    },
+    ui: {
+        'expander': '.expander',
     },
     modelEvents: {
         'feeds:sync': 'render',
     },
     events: {
         'click .feed': 'feedSelected',
+        'click @ui.expander': 'expand',
+    },
+    hideFeeds() {
+        this.$('.feeds').remove();
+        this.ui.expander.addClass('collapsed');
+    },
+    expand(ev) {
+        let expand_it = $(ev.currentTarget).is('.collapsed');
+        if (expand_it) {
+            this.selected();
+        } else {
+            this.hideFeeds();
+        }
     },
     feedSelected(ev) {
         let feed_id = $(ev.currentTarget).data('id');

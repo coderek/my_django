@@ -1,9 +1,29 @@
 .category {
-    >.title {
+    >.meta{
+        display: flex;
         background-color: black;
         color: white;
         padding: 10px;
         text-transform: capitalize;
+        line-height: 1.2em;
 
+        :first-child {
+            flex: 1 0 auto;
+        }
+        :last-child {
+            text-align: right;
+            padding-right: 10px;
+            width: 30px;
+            flex: none;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+        .expander:after {
+            content: '+';
+        }
+        .expander.collapsed:after {
+            content: '-';
+        }
     }
 }
