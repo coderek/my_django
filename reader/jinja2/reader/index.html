@@ -10,7 +10,7 @@
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
 
-        <link rel="stylesheet" href="{{ static('reader/styles/app.css') }}">
+        {{ static('reader/styles/app.css') }}
 
         <!--
         <script src="js/vendor/modernizr-2.8.3.min.js"></script>
@@ -23,11 +23,12 @@
 
         {% include 'reader/reader_main.html' %}
 
-        <script src="{{ static('reader/scripts/app.js') }}"></script>
+        {{ static('reader/scripts/app.js') }}
+
         <script>
-        var authed = {{'true' if is_logged_in else 'false'}};
+            var authed = {{'true' if is_logged_in else 'false'}};
+            require('scripts/main');
         </script>
-        <script>require('scripts/main')</script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <!--

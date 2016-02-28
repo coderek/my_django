@@ -8,3 +8,6 @@ feedparser==5.2.1
 pytz
 PyYAML
 dropbox
+django-libsass
+django_compressor
+markupsafe

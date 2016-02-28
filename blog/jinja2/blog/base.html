@@ -7,7 +7,9 @@
         <meta name="keywords" content="Python, JavaScript, Software, Django">
         <meta name="author" content="Derek Zeng">
         <link href='https://fonts.googleapis.com/css?family=Headland+One' rel='stylesheet' type='text/css'>
-        <link type="text/css" href="{{ static('blog/home.css') }}" rel="stylesheet">
+        {% compress css %}
+        {{ static('blog/home.scss') }}
+        {% endcompress %}
     </head>
     <body>
         <header>
