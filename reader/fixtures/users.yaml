@@ -1,0 +1,10 @@
+- model: auth.user
+  fields:
+    id: 1
+    email: fred@gmail.com
+    password: pbkdf2_sha256$24000$tY8VapuheJfx$1IyzRmDMSTYyTKsPFoHw5simcAuhhF0frq3shPppRhE= # secret
+    username: fred
+    is_superuser: true
+    is_staff: true
+    is_active: true
+

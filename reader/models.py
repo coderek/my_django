@@ -5,7 +5,6 @@ from django.db import models
 
 
 class Resource(object):
-
     def as_dict(self):
         return {}
 

@@ -4,4 +4,4 @@ from .models import Post
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    pass
+    fields = ('title', 'body', 'author', 'created_at')

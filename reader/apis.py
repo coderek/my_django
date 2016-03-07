@@ -21,15 +21,14 @@ class FeedsView(CollectionAPI):
 
     def post(self, request):
         try:
-            # import pdb; pdb.set_trace()
             url = request.data.get('url')
             if Feed.objects.filter(feed_url=url).exists():
                 return HttpResponseBadRequest('Already exists!')
-            m, error = fetch_feed(url)
-            if not error:
+            try:
+                m = fetch_feed(url)
                 return self.json_response(m)
-            else:
-                return HttpResponseBadRequest(error)
+            except Exception as e:
+                return HttpResponseBadRequest(e)
         except Exception as e:
             return HttpResponseBadRequest(e)
 
@@ -64,9 +63,10 @@ class FeedView(ModelAPI):
         feed = self.instance
         # import pdb; pdb.set_trace()
         if do_refresh:
-            feed, error = fetch_feed(feed.feed_url)
-            if error:
-                return HttpResponseBadRequest(error)
+            try:
+                feed = fetch_feed(feed.feed_url)
+            except Exception as e:
+                return HttpResponseBadRequest(e)
 
         return self.json_response(feed)
 

@@ -1,31 +1,34 @@
+import logging
 import json
 
-from django.contrib.auth.models import User
 from django.test import Client, TestCase
 
-from reader.models import Entry, Feed
-from reader.support.feed import fetch_feed
+from reader.models import Entry, Feed, Category
+from reader.support.feed import fetch_feed, do_fetch_all
+
+logger = logging.getLogger('django')
+
+
+class FeedRelatedTests(TestCase):
+    fixtures = ['categories.yaml', 'feeds.yaml']
 
 
 class TestFeed(TestCase):
+    fixtures = ['categories.yaml']
 
     def test_fetch_feed(self):
-        url = 'https://weworkremotely.com/categories/2/jobs.rss'
-        f, error = fetch_feed(url)
-
-        assert Feed.objects.count() == 0
-        assert error
+        url = 'https://weworkremotely.com/categories/2-programming/jobs.rss'
+        fetch_feed(url)
+        assert Category.objects.count() == 1
+        assert Feed.objects.count() == 1
 
     def test_yc_feed(self):
         url = 'https://news.ycombinator.com/rss'
-        f, error = fetch_feed(url)
-
+        f = fetch_feed(url)
         assert Feed.objects.count() == 1
-        assert not error
 
     def test_chinese_feed(self):
         url = 'http://codingnow.com/atom.xml'
-
         fetch_feed(url)
         assert Feed.objects.count() == 1
         assert Entry.objects.count() > 0
@@ -83,18 +86,14 @@ class TestFeed(TestCase):
         assert Entry.objects.count() == 10
 
 
-class TestUpdateFeeds(TestCase):
-    fixtures = ['feeds.yaml']
-
+class TestUpdateFeeds(FeedRelatedTests):
     def test_update_feed(self):
-        assert Feed.objects.filter(pk=75).exists()
+        do_fetch_all()
+        assert Entry.objects.count() > 0
 
 
 class TestAPI(TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        User.objects.create_superuser('fred', 'fred@gmail.com', 'secret')
+    fixtures = ['categories.yaml', 'users.yaml']
 
     def setUp(self):
         if not self.client:
@@ -104,7 +103,6 @@ class TestAPI(TestCase):
             )
 
     def test_get(self):
-        # import pdb; pdb.set_trace()
         res = self.client.get(
             '/reader/api/feeds/', HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         assert len(res.json()) == 0
@@ -119,7 +117,7 @@ class TestAPI(TestCase):
     def test_post(self):
         assert self.client.login(username='fred', password='secret')
         feed = json.dumps({
-            'url': 'https://weworkremotely.com/categories/2/jobs.rss'
+            'url': 'https://weworkremotely.com/categories/2-programming/jobs.rss'
         })
         res = self.client.post(
             '/reader/api/feeds/', feed,
@@ -131,10 +129,9 @@ class TestAPI(TestCase):
         assert 'id' in res.json()
 
     def test_delete(self):
+        assert Category.objects.count() == 1
         assert self.client.login(username='fred', password='secret')
-        from reader.support.feed import fetch_feed
-        f, err = fetch_feed('https://weworkremotely.com/categories/2/jobs.rss')
-        assert not err
+        f = fetch_feed('https://weworkremotely.com/categories/2/jobs.rss')
 
         res = self.client.delete(
             '/reader/api/feeds/{}'.format(f.id),
@@ -147,3 +144,23 @@ class TestAPI(TestCase):
     @classmethod
     def tearDownClass(cls):
         pass
+
+
+
+class TestScrubber(TestCase):
+    def test_wash_html(self):
+        html = '''
+        <img alt="messenger-spotify"
+        class="attachment-post-thumbnail size-post-thumbnail wp-post-image"
+        src="http://files.techcrunch.cn/2016/03/messenger-spotify.png?w=1024"
+        style="float: left; margin: 0 10px 7px 0;"
+        height="576"
+        width="1024"></img>
+        '''
+        from reader.support.feed import wash_html
+        import lxml
+        result_html = wash_html(html)
+        result_dom = lxml.html.fromstring(result_html)
+        assert 'style' not in result_dom.attrib
+        assert 'width' not in result_dom.attrib
+        assert 'height' not in result_dom.attrib

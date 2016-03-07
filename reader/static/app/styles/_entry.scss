@@ -35,9 +35,8 @@
             max-width: 100%;
         }
         img {
-            max-width: 50%;
-            height: auto;
-            float: left;
+            max-width: 200px;
+            max-height: 200px;;
             margin: 10px;
         }
 
@@ -48,5 +47,9 @@
         padding: 10px;
         width: 100%;
         overflow: auto;
+
+        p {
+            font-size: 12pt !important;
+        }
     }
 }

@@ -11,3 +11,4 @@ dropbox
 django-libsass
 django_compressor
 markupsafe
+lxml

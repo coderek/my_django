@@ -1,8 +1,9 @@
 import logging
-
-from datetime import datetime
+from lxml.html.clean import Cleaner
 import feedparser
 import pytz
+
+from datetime import datetime
 from time import mktime, localtime
 from reader.models import Feed, Entry
 
@@ -16,30 +17,26 @@ def fetch_feed(url):
         f = Feed.objects.get(feed_url=url)
         # use etag
         d = feedparser.parse(url, etag=f.etag)
-
-        if d.status == 304:
-            # nothing changed
-            return f, None
-
     except Feed.DoesNotExist:
         d = feedparser.parse(url)
 
-    try:
-        feed = get_feed_obj(d)
-        feed['feed_url'] = url
+    feed = get_feed_obj(d)
+    feed['feed_url'] = url
 
-        f, created = Feed.objects.update_or_create(defaults=feed, feed_url=url)
+    f, created = Feed.objects.update_or_create(
+        defaults=feed, feed_url=url)
 
-        for _, entry_item in enumerate(d['entries']):
+    for _, entry_item in enumerate(d['entries']):
+        try:
             entry = get_entry_obj(entry_item)
             entry['feed'] = f
             logger.warning(entry['url'])
-            Entry.objects.update_or_create(defaults=entry, uuid=entry['uuid'])
+            Entry.objects.update_or_create(
+                defaults=entry, uuid=entry['uuid'])
+        except:
+            pass
 
-        return f, None
-    except Exception as e:
-        logger.error(e)
-        return None, e.message
+    return f
 
 
 def get_feed_obj(source):
@@ -68,16 +65,23 @@ def get_entry_obj(source):
             if 'updated_parsed' in source else localtime()
         )
     )
-    if 'content' in source:
+    try:
         content = source.content[0].get('value')
-    else:
-        content = ''
+    except:
+        content = '<p></p>'
+
+    try:
+        summary = source.description
+    except:
+        summary = '<p></p>'
+
+
     return {
         'title': source.title,
         'url': source.link,
         'author': source.author if 'author' in source else '',
-        'summary': source.description,
-        'content': content,
+        'summary': wash_html(summary),
+        'content': wash_html(content),
         'published': to_date_obj(published),
         'uuid': source.id + '+' + source.link if 'id' in source else source.title,
     }
@@ -85,3 +89,19 @@ def get_entry_obj(source):
 
 def to_date_obj(time_parsed):
     return datetime.fromtimestamp(mktime(time_parsed)).replace(tzinfo=pytz.UTC)
+
+
+def wash_html(html):
+    attrs = Cleaner.safe_attrs
+    Cleaner.safe_attrs = attrs - frozenset(['width', 'height'])
+    c = Cleaner()
+    cleaned = c.clean_html(html)
+    return cleaned
+
+
+def do_fetch_all():
+    for f in Feed.objects.all():
+        try:
+            fetch_feed(f.feed_url)
+        except Exception as e:
+            logger.error(e)
