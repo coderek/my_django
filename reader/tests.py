@@ -10,7 +10,7 @@ logger = logging.getLogger('django')
 
 
 class FeedRelatedTests(TestCase):
-    fixtures = ['categories.yaml', 'feeds.yaml']
+    fixtures = ['categories.yaml']
 
 
 class TestFeed(TestCase):
@@ -88,6 +88,7 @@ class TestFeed(TestCase):
 
 class TestUpdateFeeds(FeedRelatedTests):
     def test_update_feed(self):
+        Feed.objects.create(feed_url='http://codingnow.com/atom.xml')
         do_fetch_all()
         assert Entry.objects.count() > 0
 

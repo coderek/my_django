@@ -1,4 +1,5 @@
 import logging
+import requests
 from lxml.html.clean import Cleaner
 import feedparser
 import pytz
@@ -14,14 +15,14 @@ def fetch_feed(url):
     logger.warning('fetching feed from {}'.format(url))
 
     try:
-        f = Feed.objects.get(feed_url=url)
-        # use etag
-        d = feedparser.parse(url, etag=f.etag)
+        feed = Feed.objects.get(feed_url=url).as_dict()
     except Feed.DoesNotExist:
-        d = feedparser.parse(url)
+        feed = {'feed_url': url}
 
-    feed = get_feed_obj(d)
-    feed['feed_url'] = url
+    r = requests.get(url, timeout=10)
+    d = feedparser.parse(r.text)
+
+    feed.update(get_feed_obj(d))
 
     f, created = Feed.objects.update_or_create(
         defaults=feed, feed_url=url)
@@ -34,6 +35,7 @@ def fetch_feed(url):
             Entry.objects.update_or_create(
                 defaults=entry, uuid=entry['uuid'])
         except:
+            # just skip it
             pass
 
     return f
@@ -74,7 +76,6 @@ def get_entry_obj(source):
         summary = source.description
     except:
         summary = '<p></p>'
-
 
     return {
         'title': source.title,

@@ -66,8 +66,3 @@
   pk: 77
   fields:
     feed_url: http://feeds.feedburner.com/zhihu-daily
-- model: reader.feed
-  pk: 78
-  fields:
-    feed_url: http://www.zhihu.com/rss
-
