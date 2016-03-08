@@ -1,5 +1,6 @@
 import logging
 import json
+from unittest import skip
 
 from django.test import Client, TestCase
 
@@ -47,15 +48,16 @@ class TestFeed(TestCase):
         assert Feed.objects.count() == 1
         assert Entry.objects.count() > 0
 
+    # @skip('skip it')
     def test_repeated(self):
         url = 'http://coolshell.cn/feed'
 
         fetch_feed(url)
         assert Feed.objects.count() == 1
-        assert Entry.objects.count() > 0
+        n = Entry.objects.count()
 
         fetch_feed(url)
-        assert Feed.objects.count() == 1
+        assert Entry.objects.count() == n
 
     def test_xdite(self):
         url = 'http://feeds.feedburner.com/xxddite'

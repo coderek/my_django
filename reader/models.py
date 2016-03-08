@@ -4,12 +4,10 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-class Resource(object):
-    def as_dict(self):
-        return {}
+class ModelResource(object):
 
-    def _as_dict(self):
-        d = self.as_dict()
+    def as_dict(self):
+        d = self._as_dict()
         res = {
             'id': self.id,
         }
@@ -17,12 +15,12 @@ class Resource(object):
         return res
 
     @classmethod
-    def all(cls):
+    def dict_all(cls):
         collection = cls.objects.all()
-        return [c._as_dict() for c in collection]
+        return [c.as_dict() for c in collection]
 
 
-class Feed(Resource, models.Model):
+class Feed(ModelResource, models.Model):
     url = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
     description = models.TextField(null=True)
@@ -39,7 +37,7 @@ class Feed(Resource, models.Model):
     def __unicode__(self):
         return u'{} ({})'.format(self.title, self.category.name)
 
-    def as_dict(self):
+    def _as_dict(self):
         return {
             'title': self.title,
             'description': self.description,
@@ -48,12 +46,10 @@ class Feed(Resource, models.Model):
 
     @property
     def new_entries_count(self):
-        oneday = timedelta(days=1)
-        return self.entries.filter(
-            created_at__gte=datetime.today() - oneday).count()
+        return self.entries.filter(is_read=False).count()
 
 
-class Tag(Resource, models.Model):
+class Tag(ModelResource, models.Model):
     name = models.CharField(max_length=255)
     entries = models.ManyToManyField('Entry')
 
@@ -64,7 +60,7 @@ class Tag(Resource, models.Model):
         return u'{}: {} entries'.format(self.name, self.entries.count())
 
 
-class Category(Resource, models.Model):
+class Category(ModelResource, models.Model):
     name = models.CharField(max_length=255)
 
     created_at = models.DateTimeField(auto_now_add=True, null=True)
@@ -73,14 +69,14 @@ class Category(Resource, models.Model):
     def __unicode__(self):
         return u'{}: {} feeds'.format(self.name, self.feeds.count())
 
-    def as_dict(self):
+    def _as_dict(self):
         return {
             'name': self.name,
             'count': self.feeds.count(),
         }
 
 
-class Entry(Resource, models.Model):
+class Entry(ModelResource, models.Model):
     feed = models.ForeignKey('Feed', related_name='entries')
     title = models.CharField(max_length=255)
     url = models.CharField(max_length=255, unique=True)
@@ -99,7 +95,7 @@ class Entry(Resource, models.Model):
     def __unicode__(self):
         return self.title
 
-    def as_dict(self):
+    def _as_dict(self):
         return {
             'title': self.title,
             'summary': self.summary,
@@ -107,4 +103,5 @@ class Entry(Resource, models.Model):
             'published': self.published,
             'url': self.url,
             'is_starred': self.is_starred,
+            'is_read': self.is_read,
         }

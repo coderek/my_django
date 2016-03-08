@@ -86,7 +86,11 @@ let CategoryView = Marionette.ItemView.extend({
     },
     templateHelpers() {
         return {
-            'feeds': this.model.feeds.toJSON(),
+            'feeds': this.model.feeds.map((f) => {
+                return _.extend(f.toJSON(), {
+                    'count': f.get('count') > 99 ? '99+' : f.get('count') + '',
+                });
+            }),
         };
     }
 });
@@ -124,12 +128,20 @@ let EntryView = Marionette.ItemView.extend({
     },
     modelEvents: {
         'change:is_starred': 'updateStar',
+        'change:is_read': 'updateRead',
     },
     updateStar() {
         if (this.model.get('is_starred')) {
             this.ui.star.html('&#9733;');
         } else {
             this.ui.star.html('&#9734;');
+        }
+    },
+    updateRead() {
+        if (this.model.isNewEntry()) {
+            this.$el.removeClass('new');
+        } else {
+            this.$el.addClass('new');
         }
     },
     toggleStar() {
@@ -143,11 +155,19 @@ let EntryView = Marionette.ItemView.extend({
 
         this.ui.entry_content.html(this.model.content());
         this.$el.addClass('open');
+        if (this.model.isNewEntry()) {
+            this.model.save(
+                {is_read: true},
+                {
+                    patch: true,
+                    wait: true,
+                    success: ()=> this.model.collection.parent_model.fetch()
+                }
+            );
+        }
     },
     onRender() {
-        if (this.model.isNewEntry()) {
-            this.$el.addClass('new');
-        }
+        this.updateRead();
     }
 });
 

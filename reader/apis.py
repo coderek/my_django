@@ -26,7 +26,7 @@ class FeedsView(CollectionAPI):
                 return HttpResponseBadRequest('Already exists!')
             try:
                 m = fetch_feed(url)
-                return self.json_response(m)
+                return self.json_response(m.as_dict())
             except Exception as e:
                 return HttpResponseBadRequest(e)
         except Exception as e:
@@ -42,7 +42,7 @@ class EntryView(ModelAPI):
     def update(self, request, *args, **kwargs):
         Entry.objects.filter(pk=self.instance.id).update(**request.data)
         self.instance.refresh_from_db()
-        return self.json_response(self.instance)
+        return self.json_response(self.instance.as_dict())
 
 
 class EntriesView(CollectionAPI):
@@ -52,7 +52,7 @@ class EntriesView(CollectionAPI):
         self.feed = Feed.objects.get(pk=kwargs.get('feed_id'))
 
     def index(self, request):
-        return self.json_response(self.feed.entries)
+        return self.json_response(e.as_dict() for e in self.feed.entries.all())
 
 
 class FeedView(ModelAPI):
@@ -68,7 +68,7 @@ class FeedView(ModelAPI):
             except Exception as e:
                 return HttpResponseBadRequest(e)
 
-        return self.json_response(feed)
+        return self.json_response(feed.as_dict())
 
 
 class CategoryView(CollectionAPI):

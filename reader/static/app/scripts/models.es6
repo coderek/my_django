@@ -6,6 +6,7 @@ let SubCollectionMixin = {
             this._setup_sub_events(name, this[name]);
             let base = this.url() + `/${data["id"]}`;
             this[name].url = `${base}/${name}`;
+            this[name].parent_model = this;
         }
         return Backbone.Model.prototype.parse.apply(this, arguments);
     },
@@ -26,11 +27,12 @@ let Entry = Backbone.Model.extend({
         'is_starred': false,
     },
     isNewEntry() {
-        let published_date = this.get('published');
-        let today = new Date();
-        return today.getYear() == published_date.getYear() &&
-            today.getMonth() == published_date.getMonth() &&
-            today.getDate() == published_date.getDate();
+        // let published_date = this.get('published');
+        // let today = new Date();
+        // return today.getYear() == published_date.getYear() &&
+        //     today.getMonth() == published_date.getMonth() &&
+        //     today.getDate() == published_date.getDate();
+        return !this.get('is_read');
     },
     toggleStar() {
         this.save({is_starred: !this.get('is_starred')});
@@ -42,7 +44,11 @@ let Entry = Backbone.Model.extend({
         return data;
     },
     content() {
-        return this.get('content') || this.get('summary');
+        if ($(this.get('content')).text()) {
+            return this.get('content');
+        } else {
+            return this.get('summary');
+        }
     }
 });
 

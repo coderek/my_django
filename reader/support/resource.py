@@ -1,3 +1,4 @@
+import types
 import logging
 import json
 
@@ -5,6 +6,7 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.http import (
     HttpResponse,
+    HttpResponseBadRequest,
     HttpResponseForbidden,
     HttpResponseNotFound,
     JsonResponse,
@@ -63,7 +65,7 @@ class BaseView(View):
                 return HttpResponseNotFound
 
         if request.is_ajax():
-            if (request.method in ('POST', 'PUT', 'DELETE') and
+            if (request.method in ('POST', 'PUT', 'PATCH', 'DELETE') and
                     not self.is_logged_in):
                 return HttpResponseForbidden('Must login')
             # import pdb; pdb.set_trace()
@@ -75,7 +77,7 @@ class BaseView(View):
                     return self.index(self.request)
             elif request.method == 'POST':
                 return self.post(self.request, *args, **kwargs)
-            elif request.method == 'PUT':
+            elif request.method in ('PUT', 'PATCH'):
                 return self.update(self.request, *args, **kwargs)
             elif request.method == 'DELETE':
                 return self.delete(self.request, *args, **kwargs)
@@ -93,25 +95,28 @@ class BaseView(View):
         tpl = get_template(self.template)
         return HttpResponse(tpl.render(self.get_context()))
 
-    def json_response(self, data_or_model):
+    def json_response(self, data):
+        '''
         res = {}
-        if (isinstance(data_or_model, models.Manager) or
-                isinstance(data_or_model, QuerySet)):
-            data_or_model = [d.as_dict() for d in data_or_model.all()]
-
-        if isinstance(data_or_model, models.Model):
+        if hasattr(data_or_model, 'dict_all') and callable(data_or_model.dict_all):
+            res = data_or_model.dict_all()
+        elif isinstance(data_or_model, models.Model):
             res = data_or_model.as_dict()
-            res.update({'id': data_or_model.id})
-        else:
+        elif type(data_or_model) is dict:
             res = data_or_model
+        else:
+            return HttpResponseBadRequest(type(data_or_model))
+        '''
+        if isinstance(data, types.GeneratorType):
+            data = list(data)
 
-        return JsonResponse(res, safe=False)
+        return JsonResponse(data, safe=False)
 
 
 class CollectionAPI(BaseView):
 
     def index(self, request):
-        all_models = self.model_cls.all()
+        all_models = self.model_cls.dict_all()
         return JsonResponse(all_models, safe=False)
 
     def post(self, request):
