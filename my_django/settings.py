@@ -34,6 +34,8 @@ if not DEBUG:
 # Application definition
 
 INSTALLED_APPS = [
+    'oauth.apps.OauthConfig',
+    'sps.apps.SpsConfig',
     'blog.apps.BlogConfig',
     'reader.apps.ReaderConfig',
     'django.contrib.admin',
@@ -161,3 +163,9 @@ DROPBOX_ACCESS_KEY = 'cbG86z6iVHMAAAAAAAAlzbTryBvsjfbykC_g0fJLU4Sb2FYPvrhJ7V__mb
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
+
+FACEBOOK_APP_ID = '264078186960926'
+FACEBOOK_APP_SECRET = '1444f6d390a00ead7d4093599f20747f'
+
+MEDIA_ROOT = BASE_DIR
+MEDIA_URL = '/'

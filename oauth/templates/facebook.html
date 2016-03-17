@@ -1,0 +1,14 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
+    </head>
+    <body>
+        <script src="{% static "oauth/oauth.js" %}"></script>
+        {% if is_user_logged_in %}
+        Logged in
+        {% else %}
+        Not Logged in
+        {% endif %}
+    </body>
+</html>

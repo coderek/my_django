@@ -7,4 +7,12 @@
     is_superuser: true
     is_staff: true
     is_active: true
+- model: auth.user
+  fields:
+    id: 2
+    email: a@b.com
+    password: pbkdf2_sha256$24000$tY8VapuheJfx$1IyzRmDMSTYyTKsPFoHw5simcAuhhF0frq3shPppRhE= # secret
+    username: abc
+    is_superuser: false
+    is_active: true
 
