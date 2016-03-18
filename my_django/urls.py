@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'^reader/', include('reader.urls')),
     url(r'^oauth/', include('oauth.urls')),
     url(r'^sps/', include('sps.urls')),
+    url(r'^api/', include('api.urls')),
     url(r'^$', HomeView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

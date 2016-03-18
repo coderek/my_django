@@ -1,14 +1,38 @@
-from django.http import JsonResponse
 from .models import Message, Video, News
+from rest_framework import routers, serializers, viewsets
 
 
-def messages(request):
-    return JsonResponse(Message.all(), safe=False)
+class MessageSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Message
+        fields = ('body', 'user', 'image')
+
+class MessageViewSet(viewsets.ModelViewSet):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
 
 
-def videos(request):
-    return JsonResponse(Video.all(), safe=False)
+class VideoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Message
+        fields = ('link', 'user', 'title')
+
+class VideoViewSet(viewsets.ModelViewSet):
+    queryset = Video.objects.all()
+    serializer_class = VideoSerializer
 
 
-def news(request):
-    return JsonResponse(News.all(), safe=False)
+class NewsSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = News
+        fields = ('title', 'url', 'image_url', 'summary', 'user')
+
+class NewsViewSet(viewsets.ModelViewSet):
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
+
+
+router = routers.DefaultRouter()
+router.register(r'messages', MessageViewSet)
+router.register(r'videos', VideoViewSet)
+router.register(r'news', NewsViewSet)

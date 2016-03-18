@@ -14,3 +14,7 @@ markupsafe
 lxml
 request
 Pillow
+djangorestframework
+django-filter
+markdown
+django-extensions
