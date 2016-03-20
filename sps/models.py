@@ -38,10 +38,12 @@ class Agency(Model):
     address = models.TextField()
     contact = models.TextField()
     urls = models.TextField()
+    image = models.ImageField(
+        upload_to='uploads/%Y/%m/%d/', max_length=255, null=True)
+
 
     def __unicode__(self):
         return 'Agency:{}'.format(self.id)
-
 
 
 admin.site.register(Message)

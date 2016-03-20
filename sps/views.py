@@ -37,7 +37,7 @@ class NewsViewSet(viewsets.ModelViewSet):
 class AgencySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Agency
-        fields = ('name', 'description', 'address', 'contact', 'urls')
+        fields = ('name', 'description', 'address', 'contact', 'urls', 'image')
 
 class AgencyViewSet(viewsets.ModelViewSet):
     queryset = Agency.objects.all()
