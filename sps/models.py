@@ -9,7 +9,6 @@ class Message(Model):
     body = models.TextField()
     image = models.ImageField(
         upload_to='uploads/%Y/%m/%d/', max_length=255, null=True)
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
     def __unicode__(self):
         return 'Message:{}'.format(self.id)
@@ -18,7 +17,6 @@ class Message(Model):
 class Video(Model):
     title = models.CharField(max_length=255, default='')
     link = models.TextField()
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
     def __unicode__(self):
         return 'Video:{}'.format(self.id)
@@ -29,11 +27,24 @@ class News(Model):
     url = models.CharField(max_length=255, default='')
     image_url = models.CharField(max_length=255, default='')
     summary = models.TextField()
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
     def __unicode__(self):
         return 'News:{}'.format(self.id)
 
+
+class Agency(Model):
+    name = models.CharField(max_length=255, default='')
+    description = models.TextField()
+    address = models.TextField()
+    contact = models.TextField()
+    urls = models.TextField()
+
+    def __unicode__(self):
+        return 'Agency:{}'.format(self.id)
+
+
+
 admin.site.register(Message)
 admin.site.register(Video)
 admin.site.register(News)
+admin.site.register(Agency)

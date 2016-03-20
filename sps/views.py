@@ -1,4 +1,6 @@
-from .models import Message, Video, News
+from .models import (
+    Message, Video, News, Agency
+)
 from rest_framework import routers, serializers, viewsets
 
 
@@ -14,7 +16,7 @@ class MessageViewSet(viewsets.ModelViewSet):
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Message
+        model = Video
         fields = ('link', 'user', 'title')
 
 class VideoViewSet(viewsets.ModelViewSet):
@@ -32,7 +34,17 @@ class NewsViewSet(viewsets.ModelViewSet):
     serializer_class = NewsSerializer
 
 
+class AgencySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Agency
+        fields = ('name', 'description', 'address', 'contact', 'urls')
+
+class AgencyViewSet(viewsets.ModelViewSet):
+    queryset = Agency.objects.all()
+    serializer_class = AgencySerializer
+
 router = routers.DefaultRouter()
 router.register(r'messages', MessageViewSet)
 router.register(r'videos', VideoViewSet)
 router.register(r'news', NewsViewSet)
+router.register(r'agencies', AgencyViewSet)
