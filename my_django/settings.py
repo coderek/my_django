@@ -29,7 +29,7 @@ DEBUG = os.environ.get('django_env') != 'prod'
 ALLOWED_HOSTS = []
 
 if not DEBUG:
-    ALLOWED_HOSTS = ['zvaya.com', 'derekzeng.me']
+    ALLOWED_HOSTS = ['zvaya.com', 'derekzeng.me', 'yrp.augmify.com']
 
 # Application definition
 
