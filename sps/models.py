@@ -23,6 +23,10 @@ class Video(Model):
 
 
 class News(Model):
+
+    class Meta:
+        verbose_name_plural = 'News'
+
     title = models.CharField(max_length=255, default='')
     url = models.CharField(max_length=255, default='')
     image_url = models.CharField(max_length=255, default='')
@@ -33,6 +37,10 @@ class News(Model):
 
 
 class Agency(Model):
+
+    class Meta:
+        verbose_name_plural = 'Agencies'
+
     name = models.CharField(max_length=255, default='')
     description = models.TextField()
     address = models.TextField()
