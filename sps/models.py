@@ -11,11 +11,17 @@ class Message(Model):
         upload_to='uploads/%Y/%m/%d/', max_length=255, null=True)
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
+    def __unicode__(self):
+        return 'Message:{}'.format(self.id)
+
 
 class Video(Model):
     title = models.CharField(max_length=255, default='')
     link = models.TextField()
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+
+    def __unicode__(self):
+        return 'Video:{}'.format(self.id)
 
 
 class News(Model):
@@ -24,6 +30,9 @@ class News(Model):
     image_url = models.CharField(max_length=255, default='')
     summary = models.TextField()
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+
+    def __unicode__(self):
+        return 'News:{}'.format(self.id)
 
 admin.site.register(Message)
 admin.site.register(Video)
