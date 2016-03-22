@@ -4,6 +4,8 @@ from django.conf import settings
 from django.contrib import admin
 from blog.views import HomeView
 
+
+admin.site.site_header = 'Yellow Ribbon Project'
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^posts/', include('blog.urls')),
