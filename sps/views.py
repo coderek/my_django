@@ -7,40 +7,40 @@ from rest_framework import routers, serializers, viewsets
 class MessageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Message
-        fields = ('body', 'user', 'image')
+        fields = ('id', 'created_at', 'body', 'user', 'image')
 
 class MessageViewSet(viewsets.ModelViewSet):
-    queryset = Message.objects.all()
+    queryset = Message.objects.order_by('-created_at')
     serializer_class = MessageSerializer
 
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Video
-        fields = ('link', 'user', 'title')
+        fields = ('id', 'created_at', 'link', 'user', 'title')
 
 class VideoViewSet(viewsets.ModelViewSet):
-    queryset = Video.objects.all()
+    queryset = Video.objects.order_by('-created_at')
     serializer_class = VideoSerializer
 
 
 class NewsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = News
-        fields = ('title', 'url', 'image_url', 'summary', 'user')
+        fields = ('id', 'created_at', 'title', 'url', 'image_url', 'summary', 'user')
 
 class NewsViewSet(viewsets.ModelViewSet):
-    queryset = News.objects.all()
+    queryset = News.objects.order_by('-created_at')
     serializer_class = NewsSerializer
 
 
 class AgencySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Agency
-        fields = ('name', 'description', 'address', 'contact', 'urls', 'image')
+        fields = ('id', 'created_at', 'name', 'description', 'address', 'contact', 'urls', 'image')
 
 class AgencyViewSet(viewsets.ModelViewSet):
-    queryset = Agency.objects.all()
+    queryset = Agency.objects.order_by('-created_at')
     serializer_class = AgencySerializer
 
 router = routers.DefaultRouter()
