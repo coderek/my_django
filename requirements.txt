@@ -18,3 +18,4 @@ djangorestframework
 django-filter
 markdown
 django-extensions
+supervisor
