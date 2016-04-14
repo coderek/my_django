@@ -1,5 +1,7 @@
 <div class="title-and-time" data-id="{{ id }}">
+    {{#if authed}}
     <span>{{# if is_starred }}&#9733; {{else}} &#9734; {{/if }}</span>
+    {{/if}}
     <span class="title">{{ title }}</span>
     <a href="{{ url }}" target="blank">Link</a>
     <time>{{ date published }} </time>

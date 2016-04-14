@@ -98,3 +98,10 @@ $.fn.serializeObject = function()
     });
     return o;
 };
+
+// override mixinTemplateHelpers from marionette
+var mixinTemplateHelpers = Marionette.View.prototype.mixinTemplateHelpers;
+Marionette.View.prototype.mixinTemplateHelpers = function (data) {
+    var data = mixinTemplateHelpers.call(this, data);
+    return _.extend(global_context || {}, data);
+};

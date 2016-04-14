@@ -2,9 +2,9 @@ let SubCollectionMixin = {
     parse(data) {
         if (this.isNew() && _.has(data, this.idAttribute) && this.sub_collection) {
             let {name, SubCollection} = this.sub_collection;
-            this[name] = new SubCollection;
+            this[name] = new SubCollection();
             this._setup_sub_events(name, this[name]);
-            let base = this.url() + `/${data["id"]}`;
+            let base = this.url() + `/${data.id}`;
             this[name].url = `${base}/${name}`;
             this[name].parent_model = this;
         }
@@ -38,8 +38,8 @@ let Entry = Backbone.Model.extend({
         this.save({is_starred: !this.get('is_starred')});
     },
     parse(data) {
-        if (data['published']) {
-            data['published'] = new Date(data['published']);
+        if (data.published) {
+            data.published = new Date(data.published);
         }
         return data;
     },
@@ -48,6 +48,11 @@ let Entry = Backbone.Model.extend({
             return this.get('content');
         } else {
             return this.get('summary');
+        }
+    },
+    save() {
+        if (global_context.authed) {
+            this.constructor.__super__.save.apply(this, arguments);
         }
     }
 });
@@ -68,6 +73,11 @@ let Feed = Backbone.Model.extend({
     },
     refresh() {
         this.fetch({data: {refresh: true}}).then(()=>this.entries.fetch());
+    },
+    save() {
+        if (global_context.authed) {
+            this.constructor.__super__.save.apply(this, arguments);
+        }
     }
 }).extend(SubCollectionMixin);
 
@@ -91,5 +101,5 @@ let Categories = Backbone.Collection.extend({
     url: '/reader/api/categories',
 });
 
-let categories = new Categories;
+let categories = new Categories();
 export {categories};

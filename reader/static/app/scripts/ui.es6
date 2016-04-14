@@ -257,11 +257,6 @@ let TopRegionView = Marionette.ItemView.extend({
     triggers: {
         'click @ui.add_button': 'feed:create',
     },
-    templateHelpers() {
-        return {
-            authed
-        };
-    },
 });
 
 
