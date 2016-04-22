@@ -52,7 +52,7 @@ class EntriesView(CollectionAPI):
         self.feed = Feed.objects.get(pk=kwargs.get('feed_id'))
 
     def index(self, request):
-        return self.json_response(e.as_dict() for e in self.feed.entries.all())
+        return self.json_response(e.as_dict() for e in self.feed.entries.order_by('-created_at')[:100])
 
 
 class FeedView(ModelAPI):
