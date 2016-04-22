@@ -2,9 +2,17 @@ $rad: 10px;
 
 html {
     width: 100%;
+    color: #636060;
+    a {
+        color: #636060;
+        &:hover {
+            color: darken(#636060, 10%);
+        }
+    }
+    font-family: Arial;
 }
 body {
-    background-color: #333;
+    // background-color: #333;
     width: 100%;
     margin: 10px auto;
 }
@@ -21,10 +29,12 @@ header {
 }
 
 footer {
+    color: aquamarine;
     div {
         padding: 0 10px;
     }
     .content {
+        background: #333333;
         border-bottom-left-radius: $rad;
         border-bottom-right-radius: $rad;
     }
@@ -63,7 +73,13 @@ a {
 }
 
 .menu {
-    background: #aaa;
+    background: #333;
+    a {
+        color: aquamarine;
+        &:hover {
+            color: lighten(aquamarine, 20%);
+        }
+    }
     margin: 0 -10px;
     li {
         padding: 4px;

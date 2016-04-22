@@ -11,30 +11,31 @@
     pre {
         max-width: 100%;
         overflow-x: auto;
-        background-color: #ddd;
         padding: 10px;
+        color: #636060;
     }
 
     .title {
         margin-top: 20px;
         border-left: 10px solid #aaa;
-        padding-left: 20px;
+        padding-left: 10px;
         margin-bottom: 10px;
         font-size: 14pt;
     }
 
-    .title + time {
+    .title time {
         margin-bottom: 10px;
         display: block;
+        font-size: 80%;
+        color: lighten(#888, 5%);
     }
 
     .more {
         a {
             color: #aaa;
         }
-        margin-top: 10px;
+        margin-top: 20px;
         margin-right: 10px;
-        text-align: right;
     }
 
     .body {
@@ -43,11 +44,21 @@
         }
         p {
             margin-bottom: 30px;
-            text-indent: 50px;
+            text-indent: 20px;
 
+        }
+        code {
+            color: #636060;
+            padding: 0px;
+            background: antiquewhite;
+        }
+
+        pre {
+            background: antiquewhite;
+            border: 1px solid #888;
             code {
-                background-color: #888;
-                color: white;
+                border: none;
+                color: #636060;
                 padding: 0 2px;
             }
         }

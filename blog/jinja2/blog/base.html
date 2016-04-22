@@ -1,6 +1,6 @@
 <!doctype html>
 <html class="no-js" lang="">
-    <title>Blog</title>
+    <title>Coderek's Sites</title>
     <head>
         <meta charset="utf-8">
         <meta name="description" content="Talk the talk, code the code">
@@ -14,21 +14,7 @@
         {% endcompress %}
     </head>
     <body>
-        <header>
-            <div class="content">
-                <h1>
-                    Coderek's Django Site
-                </h1>
-            </div>
-        </header>
-        <nav>
-            <div class="content">
-                <ul class="menu">
-                    <li><a href="{{ url('blog') }}">Blog</a></li>
-                    <li><a href="{{ url('reader') }}">Reader</a></li>
-                </ul>
-            </div>
-        </nav>
+        {% include 'blog/header_and_nav.html' %}
         <div class="content body">
             <div class="main">
                 {% block content %} {% endblock %}

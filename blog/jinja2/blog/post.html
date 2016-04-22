@@ -4,10 +4,12 @@
     <div class="article">
         <div class="title">
             {{ p.title }}
+            <br>
+            
+            {% if p.created_at %}
+                <time>{{ p.created_at.strftime('%Y-%m-%d') }} </time>
+            {% endif %}
         </div>
-        {% if p.created_at %}
-            <time>{{ p.created_at.strftime('%Y-%m-%d') }} </time>
-        {% endif %}
         <div class="body">
             {{ p.body_text|safe }}
         </div>
