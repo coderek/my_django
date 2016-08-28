@@ -1,121 +1,120 @@
 $rad: 10px;
 
 html {
-    width: 100%;
+  width: 100%;
+  color: #636060;
+  a {
     color: #636060;
-    a {
-        color: #636060;
-        &:hover {
-            color: darken(#636060, 10%);
-        }
+    &:hover {
+      color: darken(#636060, 10%);
     }
-    font-family: Arial;
+  }
+  font-family: Arial;
 }
 body {
-    // background-color: #333;
-    width: 100%;
-    margin: 10px auto;
+  width: 100%;
+  margin: auto;
 }
 
 header {
-    h1 {
-        margin: 0;
-        padding: 10px;
-    }
-    .content {
-        border-top-left-radius: $rad;
-        border-top-right-radius: $rad;
-    }
+  h1 {
+    margin: 0;
+    padding: 10px;
+  }
+  .content {
+    border-top-left-radius: $rad;
+    border-top-right-radius: $rad;
+  }
 }
 
 footer {
-    color: aquamarine;
-    div {
-        padding: 0 10px;
-    }
-    .content {
-        background: #333333;
-        border-bottom-left-radius: $rad;
-        border-bottom-right-radius: $rad;
-    }
+  div {
+    padding: 0 10px;
+  }
+  .content {
+    border-bottom-left-radius: $rad;
+    border-bottom-right-radius: $rad;
+  }
 }
 
 .content {
-    width: 60%;
-    padding: 10px;
-    background-color: #eee;
-    margin: 0 auto;
+  width: 60%;
+  padding: 10px;
+  margin: 0 auto;
 
-    .main {
-        max-width: 100%;
-        flex: 1 1 auto;
-    }
-
-    .main + nav {
-        /* disable side menu first */
-        display: none;
-
-        flex: none;
-        width: 30%;
-    }
-
-}
-
-.content.body {
+  &.body {
     display: flex;
+  }
+
+  .main {
+    width: 600px;
+    flex: none;
+  }
+
+  .side-menu {
+    flex: none;
+    width: 30%;
+  }
+
 }
 
 
 a {
-    text-decoration: none;
-    color: black;
-    word-break: break-all;
+  text-decoration: none;
+  color: black;
+  word-break: break-all;
 }
 
 .menu {
-    background: #333;
-    a {
-        color: aquamarine;
-        &:hover {
-            color: lighten(aquamarine, 20%);
-        }
+  background: #333;
+  a {
+    color: aquamarine;
+    &:hover {
+      color: lighten(aquamarine, 20%);
     }
+  }
+  ul {
     margin: 0 -10px;
-    li {
-        padding: 4px;
-        border: #ddd;
-        float: left;
-        list-style: none;
-        width: 60px;
-    }
+  }
+  li {
+    padding: 4px;
+    border: #ddd;
+    float: left;
+    list-style: none;
+    width: 60px;
+  }
 }
 
 ul:after {
-    content: ' ';
-    display: block;
-    clear: both;
+  content: ' ';
+  display: block;
+  clear: both;
 }
 
 nav.side-menu {
-    border-left: 1px solid #eee;
-    padding-left: 4px;
-    padding: 10px;
+  border-left: 1px solid #eee;
+  padding-left: 4px;
+  padding: 10px;
 }
 
 nav.side-menu {
-    ul {
-        list-style: none;
-        padding: 0;
-    }
-    li {
-        padding: 0;
-        margin: 0;
-    }
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  li {
+    padding: 0;
+    margin: 0;
+  }
 }
 
 input.search {
-    max-width: 200px;
+  max-width: 200px;
 }
 
 @import './article';
 @import './responsive';
+
+.banner {
+  background-image: url("/static/blog/header.jpg");
+}

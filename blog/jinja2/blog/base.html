@@ -10,14 +10,26 @@
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <link href='https://fonts.googleapis.com/css?family=Headland+One' rel='stylesheet' type='text/css'>
         {% compress css %}
-        {{ static('blog/home.scss') }}
+        {{static('blog/home.scss')}}
         {% endcompress %}
     </head>
     <body>
-        {% include 'blog/header_and_nav.html' %}
+        <header class="banner">
+            <div class="content">
+                <h1>Coderek's Blog</h1>
+            </div>
+        </header>
+        <nav class="menu">
+            <div class="content">
+                <ul>
+                    <li><a href="{{ url('blog') }}">Blog</a></li>
+                    <li><a href="{{ url('reader') }}">Reader</a></li>
+                </ul>
+            </div>
+        </nav>
         <div class="content body">
             <div class="main">
-                {% block content %} {% endblock %}
+                {% block main %}{% endblock %}
             </div>
             <nav class="side-menu">
                 <div class="input-group">
@@ -27,13 +39,14 @@
                     </form>
                 </div>
                 {% include 'blog/recent_posts.html' %}
-                {% include 'blog/contacts.html' %}
+{#                {% include 'blog/contacts.html' %}#}
             </nav>
         </div>
+        {% include 'blog/footer.html' %}
         <footer>
             <div class="content">
                 <div>
-                    coderek @ 2014
+                    coderek @ 2016
                 </div>
             </div>
         </footer>

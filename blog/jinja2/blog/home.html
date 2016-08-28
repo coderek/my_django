@@ -1,22 +1,22 @@
 {% extends 'blog/base.html' %}
 
-{% block content %}
-<div class="articles">
-    {% for p in posts %}
-    <div class="article">
-        <div class="title">
-            {{ p.title }}
-        </div>
-        {% if p.created_at %}
-            <time>{{ p.created_at.strftime('%Y-%m-%d') }} </time>
-        {% endif %}
-        <div class="body">
-            {{ p.body_snippet|replace("\n", "<br>")|safe }}
-        </div>
-        <div class="more">
-            <a href="{{ url('post', args=[p.id]) }}">Read More </a>
-        </div>
+{% block main %}
+    <div class="articles">
+        {% for p in posts %}
+            <div class="article">
+                <div class="title">
+                    {{ p.title }}
+                </div>
+                {% if p.created_at %}
+                    <time>{{ p.created_at.strftime('%Y-%m-%d') }} </time>
+                {% endif %}
+                <div class="preview">
+                    {{ p.preview }}
+                </div>
+                <div class="more">
+                    <a href="{{ url('post', args=[p.id]) }}">Read More </a>
+                </div>
+            </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 {% endblock %}

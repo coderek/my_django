@@ -5,7 +5,7 @@ from django.contrib import admin
 from blog.views import HomeView
 
 
-admin.site.site_header = 'Yellow Ribbon Project'
+admin.site.site_header = 'Derek Zeng\' Admin'
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^posts/', include('blog.urls')),
