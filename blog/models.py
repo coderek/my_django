@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from HTMLParser import HTMLParser
 import markdown2
 
 from django.db import models
@@ -23,11 +24,17 @@ class Post(models.Model):
 
     @property
     def body_snippet(self):
-        return self.body[:200] + '...'
+        if self.preview:
+            stripper = MLStripper()
+            stripper.feed(self.preview)
+            return  stripper.get_data()
+        else:
+            return ''
 
     @property
     def body_text(self):
         return markdown2.markdown(self.body)
+
 
 
 class Comment(models.Model):
@@ -37,3 +44,15 @@ class Comment(models.Model):
     content = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
+
+
+class MLStripper(HTMLParser):
+    def __init__(self):
+        self.reset()
+        self.fed = []
+
+    def handle_data(self, d):
+        self.fed.append(d)
+
+    def get_data(self):
+        return ''.join(self.fed)

@@ -11,7 +11,7 @@
                     <time>{{ p.created_at.strftime('%Y-%m-%d') }} </time>
                 {% endif %}
                 <div class="preview">
-                    {{ p.preview }}
+                    {{ p.body_snippet }}
                 </div>
                 <div class="more">
                     <a href="{{ url('post', args=[p.id]) }}">Read More </a>
