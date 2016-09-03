@@ -39,14 +39,7 @@ def collectstatic():
 
 
 def restart():
-    output = run('ps aux | grep "gunicorn: master" | grep my_django.wsgi')
-    l = output.split('\n')[0]
-    pid = re.split(r'\s+', l)[1]
-    try:
-        run('kill -TERM {}'.format(pid))
-    except:
-        pass
-    run('django_env=prod gunicorn my_django.wsgi')
+    run('supervisorctl -c /apps/my_django/supervisord.conf restart all')
 
 
 def deploy():
@@ -55,3 +48,4 @@ def deploy():
     pip_install()
     migrate()
     collectstatic()
+    restart()
