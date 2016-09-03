@@ -8,7 +8,7 @@ APP_DIR = '/apps/my_django'
 VIRTUAL_ENV = APP_DIR + '/env'
 
 env.hosts = ['derekzeng.me']
-env.user = 'root'
+env.user = 'coderek'
 env.key = '/Users/derekzeng/.ssh/id_rsa.pub'
 env.cwd = APP_DIR
 
