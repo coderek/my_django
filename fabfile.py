@@ -21,8 +21,8 @@ def init_virtual_env():
 
 def pip_install():
     init_virtual_env()
-    run('pip install -r {}/requirements.txt'.format(APP_DIR))
     run('source {}'.format(os.path.join(VIRTUAL_ENV, 'bin', 'activate')))
+    run('pip install -r {}/requirements.txt'.format(APP_DIR))
 
 
 def git():
