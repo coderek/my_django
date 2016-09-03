@@ -33,8 +33,13 @@ def migrate():
     run('django_env=prod ./manage.py migrate')
 
 
+def collectstatic():
+    run('django_env=prod ./manage.py collectstatic')
+
+
 def deploy():
     run('cd ' + APP_DIR)
     git()
     pip_install()
     migrate()
+    collectstatic()
