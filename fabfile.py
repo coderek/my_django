@@ -1,4 +1,5 @@
 from __future__ import with_statement
+import re
 import os
 from fabric.api import settings, run, local, env
 from fabric.contrib.console import confirm
@@ -34,7 +35,18 @@ def migrate():
 
 
 def collectstatic():
-    run('django_env=prod ./manage.py collectstatic')
+    run('django_env=prod ./manage.py collectstatic --noinput -i node_modules')
+
+
+def restart():
+    output = run('ps aux | grep "gunicorn: master" | grep my_django.wsgi')
+    l = output.split('\n')[0]
+    pid = re.split(r'\s+', l)[1]
+    try:
+        run('kill -TERM {}'.format(pid))
+    except:
+        pass
+    run('django_env=prod gunicorn my_django.wsgi')
 
 
 def deploy():
