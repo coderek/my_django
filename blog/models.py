@@ -24,12 +24,13 @@ class Post(models.Model):
 
     @property
     def body_snippet(self):
+        stripper = MLStripper()
         if self.preview:
-            stripper = MLStripper()
             stripper.feed(self.preview)
             return  stripper.get_data()
         else:
-            return ''
+            stripper.feed(self.body[:100])
+            return  stripper.get_data()
 
     @property
     def body_text(self):
