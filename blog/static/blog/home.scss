@@ -3,13 +3,13 @@ $rad: 10px;
 html {
   width: 100%;
   color: #636060;
+  font-family: 'Raleway', sans-serif;
   a {
     color: #636060;
     &:hover {
       color: darken(#636060, 10%);
     }
   }
-  font-family: Arial;
 }
 body {
   width: 100%;
@@ -28,6 +28,7 @@ header {
 }
 
 footer {
+  padding-left:30px;
   div {
     padding: 0 10px;
   }
@@ -48,6 +49,8 @@ footer {
 
   .main {
     width: 600px;
+    margin-top: -10px;
+    margin-bottom: -10px;
     flex: none;
   }
 
@@ -117,4 +120,79 @@ input.search {
 
 .banner {
   background-image: url("/static/blog/header.jpg");
+}
+
+.comment-area {
+  margin: 30px;
+  border-top: 1px solid #eee;
+
+
+  button[type=submit] {
+    border: 1px solid #888;
+    width: 100px;
+    height: 30px;
+    background-color: white;
+  }
+}
+
+.input-group {
+  margin: 4px 0;
+  &.has-error {
+    .help-block {
+      display: block;
+    }
+  }
+  .help-block {
+    margin-top: 4px;
+    display: none;
+    color: red;
+  }
+  label {
+    display: block;
+    margin: 10px 4px 0 0;
+  }
+  textarea, input {
+    border-color: #eee;
+  }
+  [type=text], [type=email] {
+    width: 200px;
+    height: 20px;
+  }
+  textarea {
+    border-color: #888;
+    width: 400px;
+  }
+}
+
+div.post {
+  //background-color: #eee;
+}
+
+.comments-container {
+  padding-left: 0;
+  margin-top: 10px;
+  .comment {
+    font-size: 0.9em;
+    list-style: none;
+    padding: 8px 0;
+    margin: 2px;
+
+    p {
+      padding: 10px 0;
+      border-bottom:1px solid #aaa;
+      margin-bottom: 4px;
+      margin-top: 4px;
+    }
+    div {
+      font-size: 0.9em;
+      text-align: right;
+    }
+    span {
+      margin-right: 10px;
+    }
+    time {
+      padding-left: 10px;
+      border-left: 1px solid;
+    }
+  }
 }

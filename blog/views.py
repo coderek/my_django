@@ -1,7 +1,13 @@
+from datetime import datetime
 from django.template.loader import get_template
-from django.http import HttpResponse
-from blog.models import Post
+from django.http import HttpResponse, JsonResponse
+from blog.models import Post, Comment
 from django.views.generic import View
+from rest_framework.views import APIView
+from rest_framework.response import (
+    Response,
+)
+from rest_framework import serializers
 
 
 class BlogView(View):
@@ -42,3 +48,31 @@ class SearchView(BlogView):
             'term': term,
             'posts': found_posts,
         })
+
+
+class NicelyFormattedDate(serializers.DateTimeField):
+
+    def to_representation(self, value):
+        return value.strftime('%Y-%m-%d %H:%M:%S%p')
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    created_at = NicelyFormattedDate(required=False)
+    class Meta:
+        model = Comment
+        fields = ('id', 'content', 'email', 'name', 'reply_to', 'post', 'created_at')
+
+
+class CommentsView(APIView):
+    def post(self, request, format=None):
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def get(self, request, format=None):
+        comments = Comment.objects.filter(post_id=request.GET.get('post')).order_by('-created_at').all()
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)

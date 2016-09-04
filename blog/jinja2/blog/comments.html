@@ -1,1 +1,53 @@
-<h3>Comments</h3>
+<div class="comment-area">
+    <h3>Comments</h3>
+    <div id="comments"></div>
+
+    <form id="comment_form">
+        <h3>Post a comment</h3>
+        <input type="text" hidden value="{{ p.id }}" name="post_id">
+        <div class="input-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
+            <p class="help-block">
+                Name is required
+            </p>
+        </div>
+
+        <div class="input-group">
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email">
+            <p class="help-block">
+                Email is required
+            </p>
+        </div>
+
+{#        <div class="input-group">#}
+{#            <label for="test">Test:</label>#}
+{#            <input type="text" name="test" id="test">#}
+{#            <p class="help-block">#}
+{#                Test is required#}
+{#            </p>#}
+{#        </div>#}
+
+        <div class="input-group">
+            <label for="comment">Comment</label>
+            <textarea name="comment" id="comment" cols="30" rows="10"></textarea>
+            <p class="help-block">
+                Comment is required
+            </p>
+        </div>
+
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+
+<script src="https://npmcdn.com/react@15.3.1/dist/react.js"></script>
+<script src="https://npmcdn.com/react-dom@15.3.1/dist/react-dom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.15.0/lodash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+{% compress js %}
+    {{ static('blog/comments.js') }}
+{% endcompress %}
+

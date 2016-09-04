@@ -1,17 +1,19 @@
 {% extends 'blog/base.html' %}
 
 {% block main %}
-    <div class="article">
-        <div class="title">
-            {{ p.title }}
+    <div class="post">
+        <div class="article">
+            <div class="title">
+                {{ p.title }}
+            </div>
+            {% if p.created_at %}
+                <time>{{ p.created_at.strftime('%Y-%m-%d') }} </time>
+            {% endif %}
+            <div class="body">
+                {{ p.body_text|safe }}
+            </div>
         </div>
-        {% if p.created_at %}
-            <time>{{ p.created_at.strftime('%Y-%m-%d') }} </time>
-        {% endif %}
-        <div class="body">
-            {{ p.body_text|safe }}
-        </div>
-    </div>
 
-    {# include 'blog/comments.html' #}
+        {% include 'blog/comments.html' %}
+    </div>
 {% endblock %}

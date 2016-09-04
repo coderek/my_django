@@ -44,6 +44,9 @@ class Comment(models.Model):
     content = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
+    reply_to = models.ForeignKey('self', null=True)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, default=1)
+    approved = models.BooleanField(default=False)
 
 
 class MLStripper(HTMLParser):
